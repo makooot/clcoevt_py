@@ -1,0 +1,18 @@
+[project]
+name = "clcoevt-py"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "HASHIGAYA, Makoto", email = "6903330+makooot@users.noreply.github.com" }
+]
+requires-python = ">=3.14"
+dependencies = []
+
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.3",
+]
