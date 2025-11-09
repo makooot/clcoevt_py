@@ -60,3 +60,38 @@ class MessageInvalidSetting(Message):
             Message.Severities.ERROR,
             "Invalid setting: " + str(setting),
         )
+
+
+class MessageFileNotFound(Message):
+    def __init__(self, filename):
+        super().__init__(
+            "FILE_NOT_FOUND",
+            Message.Severities.NOTE,
+            "File not found: " + str(filename),
+        )
+
+
+class MessageInvalidTomlValue(Message):
+    def __init__(self, name, value):
+        if isinstance(value, bool):
+            value_str = "true" if value else "false"
+        elif isinstance(value, str):
+            value_str = '"' + value + '"'
+        elif type(value) is int:
+            value_str = str(value)
+        else:
+            value_str = str(value)
+        super().__init__(
+            "INVALID_TOML_VALUE",
+            Message.Severities.WARN,
+            "Invalid value: " + str(name) + "=" + value_str,
+        )
+
+
+class MessageInvalidTomlFile(Message):
+    def __init__(self, filename):
+        super().__init__(
+            "INVALID_TOML_FILE",
+            Message.Severities.WARN,
+            "Invalid TOML file: " + str(filename),
+        )
