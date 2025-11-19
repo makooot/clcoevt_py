@@ -53,6 +53,24 @@ class MessageInvalidValue(Message):
         )
 
 
+class MessageInvalidValueS(Message):
+    def __init__(self, s):
+        super().__init__(
+            "INVALID_VALUE",
+            Message.Severities.WARN,
+            "Invalid value: " + str(s),
+        )
+
+
+class MessageInvalidType(Message):
+    def __init__(self, s):
+        super().__init__(
+            "INVALID_TYPE",
+            Message.Severities.WARN,
+            "Invalid type: " + str(s),
+        )
+
+
 class MessageInvalidSetting(Message):
     def __init__(self, setting):
         super().__init__(
