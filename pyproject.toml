@@ -1,7 +1,9 @@
 [project]
-name = "clcoevt-py"
+name = "clcoevt_py"
 version = "0.1.0"
-description = "Add your description here"
+description = "command options via commandline, environment variables and configuration files"
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
 authors = [
     { name = "HASHIGAYA, Makoto", email = "6903330+makooot@users.noreply.github.com" }
 ]
