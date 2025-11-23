@@ -1,6 +1,6 @@
 import unittest
 import os
-import clcoevt_py.cmdopts_config as cmdopts_config
+import clcoevt.cmdopts_config as cmdopts_config
 
 
 class TestCmdsOptsConfig(unittest.TestCase):

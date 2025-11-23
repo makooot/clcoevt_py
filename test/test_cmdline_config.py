@@ -1,6 +1,6 @@
 import unittest
 import sys
-import clcoevt_py.cmdline_config as cmdline_config
+import clcoevt.cmdline_config as cmdline_config
 
 
 class TestEnvvarConfig(unittest.TestCase):

@@ -1,5 +1,5 @@
 import unittest
-import clcoevt_py.tomlfile_config as tomlfile_config
+import clcoevt.tomlfile_config as tomlfile_config
 
 
 class TestTomlfileConfig(unittest.TestCase):

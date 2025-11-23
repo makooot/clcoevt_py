@@ -1,6 +1,6 @@
 import unittest
 import os
-import clcoevt_py.envvar_config as envvar_config
+import clcoevt.envvar_config as envvar_config
 
 
 class TestEnvvarConfig(unittest.TestCase):

@@ -1,7 +1,7 @@
 import unittest
 import sys
 import os
-import clcoevt_py.clcoevt as clcoevt
+import clcoevt.clcoevt as clcoevt
 
 
 class TestClcoevt(unittest.TestCase):

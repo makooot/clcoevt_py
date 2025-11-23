@@ -3,7 +3,7 @@
 version: '3'
 
 env:
-  PACKAGE: clcoevt_py
+  PACKAGE: clcoevt
 
 tasks:
   default:
