@@ -8,7 +8,7 @@ def get(options):
     messages = []
     for dest in options:
         option = options[dest]
-        environmentVariableName = option.get("environmentVariable", None)
+        environmentVariableName = option.get("envvar", None)
         option_type = option.get("type", None)
         match option_type:
             case "int":

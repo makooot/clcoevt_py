@@ -120,7 +120,7 @@ def get(env, options):
 
     for dest in options:
         option = options[dest]
-        name = option["cmds"]
+        name = option["cmd"]
         add_argument_setting = {}
         add_argument_setting["dest"] = dest
         add_argument_setting["default"] = None

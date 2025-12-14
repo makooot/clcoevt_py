@@ -6,10 +6,10 @@ import clcoevt.envvar_config as envvar_config
 class TestEnvvarConfig(unittest.TestCase):
     def setUp(self):
         self.options = {
-            "db_host": {"environmentVariable": "DB_HOST", "type": "string"},
-            "db_port": {"environmentVariable": "DB_PORT", "type": "int"},
+            "db_host": {"envvar": "DB_HOST", "type": "string"},
+            "db_port": {"envvar": "DB_PORT", "type": "int"},
             "allow": {
-                "environmentVariable": "ALLOW",
+                "envvar": "ALLOW",
                 "type": "bool",
             },
         }

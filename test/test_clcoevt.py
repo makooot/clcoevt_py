@@ -7,34 +7,40 @@ import clcoevt.clcoevt as clcoevt
 class TestClcoevt(unittest.TestCase):
     def setUp(self):
         self.options = {
-            "command_name": "testcmd",
-            "command_version": "1.2.3",
-            "usage": """\
+            "command": {
+                "name": "testcmd",
+                "version": "1.2.3",
+                "usage": """\
                 Usage: testcmd [options] [files...]
                 """,
-            "argument": {"file": {"num": "0+"}},
-            "cmd_opts": "TESTCMD_OPTS",
-            "toml_file": "test-data/test_clcoevt.toml",
-            "option": {
+                "arguments": {"file": {"num": "0+"}},
+            },
+            "cmdopts": {
+                "name": "TESTCMD_OPTS",
+            },
+            "toml": {
+                "path": "test-data/test_clcoevt.toml",
+            },
+            "options": {
                 "host": {
                     "type": "string",
                     "default": "defaulthost",
-                    "cmds": ["--host"],
-                    "environmentVariable": "HOST",
+                    "cmd": ["--host"],
+                    "envvar": "HOST",
                     "toml": "HOST",
                 },
                 "port": {
                     "type": "int",
                     "default": 10080,
-                    "cmds": ["--port"],
-                    "environmentVariable": "PORT",
+                    "cmd": ["--port"],
+                    "envvar": "PORT",
                     "toml": "PORT",
                 },
                 "allow": {
                     "type": "bool",
                     "default": False,
-                    "cmds": ["-a", "--allow"],
-                    "environmentVariable": "ALLOW",
+                    "cmd": ["-a", "--allow"],
+                    "envvar": "ALLOW",
                     "toml": "ALLOW",
                 },
             },
@@ -75,7 +81,7 @@ class TestClcoevt(unittest.TestCase):
         del os.environ["HOST"]
         del os.environ["PORT"]
         del os.environ["ALLOW"]
-        self.options["toml_file"] = "file-not-found.toml"
+        self.options["toml"]["path"] = "file-not-found.toml"
         clco = clcoevt.Clcoevt(self.options)
         self.assertEqual(clco.get("host"), "defaulthost")
         self.assertEqual(clco.get("port"), 10080)

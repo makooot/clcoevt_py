@@ -2,20 +2,19 @@ import argparse
 from . import common
 
 
-def get(options):
+def get(command, options):
     values = common.C()
     messages = []
 
-    if "command_name" not in options:
-        raise ValueError("command_name is required in options")
-    if "command_version" not in options:
-        raise ValueError("command_version is required in options")
+    if "name" not in command:
+        raise ValueError("name is required in command")
+    if "version" not in command:
+        raise ValueError("version is required in command")
 
-    command_name = options.get("command_name", None)
-    command_version = options.get("command_version", None)
-    usage = options.get("usage", None)
-    option = options.get("option", None)
-    argument = options.get("argument", None)
+    command_name = command.get("name", None)
+    command_version = command.get("version", None)
+    usage = command.get("usage", None)
+    argument = command.get("argument", None)
 
     argparse_setting = {}
     argparse_setting["prog"] = command_name
@@ -30,12 +29,12 @@ def get(options):
         "-v", "--version", action="version", version="%(prog)s " + command_version
     )
 
-    if option is not None:
-        for dest in option:
-            name = option[dest].get("cmds", None)
+    if options is not None:
+        for dest in options:
+            name = options[dest].get("cmd", None)
             if name is None:
                 continue
-            opt_type = option[dest].get("type", None)
+            opt_type = options[dest].get("type", None)
             add_argument_setting = {}
             add_argument_setting["dest"] = dest
             add_argument_setting["default"] = None

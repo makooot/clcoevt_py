@@ -7,34 +7,40 @@ command options via commandline, environment variables and configuration files
 import clcoevt.clcoevt as clcoevt
 
 command_details = {
-    "command_name": "testcmd",
-    "command_version": "0.1.0",
-    "usage": """\
+    "command": {
+        "name": "testcmd",
+        "version": "1.2.3",
+        "usage": """\
         Usage: testcmd [options] [files...]
         """,
-    "argument": {"files": {"num": "0+"}},
-    "cmd_opts": "TESTCMD_OPTS",
-    "toml_file": "test-data/test_clcoevt.toml",
-    "option": {
+        "arguments": {"file": {"num": "0+"}},
+    },
+    "cmdopts": {
+        "name": "TESTCMD_OPTS",
+    },
+    "toml": {
+        "path": "test-data/test_clcoevt.toml",
+    },
+    "options": {
         "host": {
             "type": "string",
             "default": "defaulthost",
-            "cmds": ["--host"],
-            "environmentVariable": "HOST",
+            "cmd": ["--host"],
+            "envvar": "HOST",
             "toml": "HOST",
         },
         "port": {
             "type": "int",
             "default": 10080,
-            "cmds": ["--port"],
-            "environmentVariable": "PORT",
+            "cmd": ["--port"],
+            "envvar": "PORT",
             "toml": "PORT",
         },
         "allow": {
             "type": "bool",
             "default": False,
-            "cmds": ["-a", "--allow"],
-            "environmentVariable": "ALLOW",
+            "cmd": ["-a", "--allow"],
+            "envvar": "ALLOW",
             "toml": "ALLOW",
         },
     },
