@@ -51,6 +51,11 @@ tasks:
       - task: reinstall
 
   test:
-    desc: run test
+    desc: run tests on the src
     cmds:
-      - uv run -m unittest discover -s test
+      - nox
+
+  test-package:
+    desc: run tests on the installed package
+    cmds:
+      - nox -f noxfile-package.py

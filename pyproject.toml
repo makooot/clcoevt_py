@@ -16,5 +16,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "nox>=2025.11.12",
+    "nox-uv>=0.6.3",
     "ruff>=0.14.3",
 ]
