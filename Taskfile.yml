@@ -27,29 +27,6 @@ tasks:
     cmds:
       - uv build
 
-  install:
-    desc: install the package
-    cmds:
-      - uv pip install --no-index --find-links=./dist {{.PACKAGE}}
-
-  uninstall:
-    desc: uninstall the package
-    cmds:
-      - uv pip uninstall {{.PACKAGE}}
-
-  reinstall:
-    desc: reinstall the package
-    cmds:
-      - uv pip install --force-reinstall --no-index --find-links=./dist {{.PACKAGE}}
-
-  reload:
-    desc: build and reinstall the package
-    cmds:
-      - task: lint
-      - task: format
-      - task: build
-      - task: reinstall
-
   test:
     desc: run tests on the src
     cmds:
