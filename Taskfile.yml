@@ -12,13 +12,26 @@ tasks:
       - task --list-all
     silent: true
 
+  Is_venv_activated:
+    internal: true
+    preconditions:
+      - sh: test -n "$VIRTUAL_ENV"
+        msg: |
+          Activate venv before this task.  Use the following command:
+          Linux, MacOS:
+              .venv/Scripts/Activate
+          Windows:
+              .venv\Scripts\Activate
+
   lint:
     desc: run linter
+    deps: [ Is_venv_activated ]
     cmds:
       - ruff check
 
   format:
     desc: run formatter
+    deps: [ Is_venv_activated ]
     cmds:
       - ruff format
 
@@ -29,10 +42,12 @@ tasks:
 
   test:
     desc: run tests on the src
+    deps: [ Is_venv_activated ]
     cmds:
       - nox
 
   test-package:
     desc: run tests on the installed package
+    deps: [ Is_venv_activated ]
     cmds:
       - nox -f noxfile-package.py
