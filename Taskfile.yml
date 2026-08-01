@@ -51,3 +51,8 @@ tasks:
     deps: [ Is_venv_activated ]
     cmds:
       - nox -f noxfile-package.py
+
+  update-project:
+    desc: Update this project
+    cmds:
+      - uv sync
