@@ -7,9 +7,25 @@ env:
 
 tasks:
   default:
-    desc: show tasks
     cmds:
-      - task --list-all
+      - task: info
+      - task: list
+    silent: true
+
+  info:
+    cmds:
+      - 'echo Task {{.TASK_VERSION}}'
+      - 'echo Taskfile: {{.TASKFILE}}'
+    silent: true
+
+  list:
+    cmds:
+      - 'task -l -t {{.TASKFILE}}'
+    silent: true
+
+  taskfile-path:
+    cmds:
+      - 'echo {{.TASKFILE}}'
     silent: true
 
   Is_venv_activated:
