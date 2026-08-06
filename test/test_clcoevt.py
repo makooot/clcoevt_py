@@ -13,7 +13,9 @@ class TestClcoevt(unittest.TestCase):
                 "usage": """\
                 Usage: testcmd [options] [files...]
                 """,
-                "arguments": {"file": {"num": "0+"}},
+                "arguments": [
+                    {"key": "file", "num": "0+"},
+                ],
             },
             "cmdopts": {
                 "name": "TESTCMD_OPTS",

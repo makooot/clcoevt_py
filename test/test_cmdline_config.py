@@ -9,9 +9,9 @@ class TestEnvvarConfig(unittest.TestCase):
             "command": {
                 "name": "testcmd",
                 "version": "1.2.3",
-                "argument": {
-                    "file": {"num": "0+"},
-                },
+                "arguments": [
+                    {"key": "file", "num": "0+"},
+                ],
             },
             "options": {
                 "host": {"cmd": ["--host"], "type": "string"},
@@ -54,7 +54,7 @@ class TestEnvvarConfig(unittest.TestCase):
             "command": {
                 "name": "testcmd",
                 "version": "1.2.3",
-                "argument": {"arg1": {"num": "invalid_num"}},
+                "arguments": [{"key": "arg1", "num": "invalid_num"}],
             },
             "options": {},
         }

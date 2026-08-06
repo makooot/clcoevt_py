@@ -14,7 +14,7 @@ def get(command, options):
     command_name = command.get("name", None)
     command_version = command.get("version", None)
     usage = command.get("usage", None)
-    argument = command.get("argument", None)
+    arguments = command.get("arguments", None)
 
     argparse_setting = {}
     argparse_setting["prog"] = command_name
@@ -51,20 +51,23 @@ def get(command, options):
 
             parser.add_argument(*name, **add_argument_setting)
 
-    if argument is not None:
-        for dest in argument:
-            num = argument[dest].get("num", None)
+    if arguments is not None:
+        for a in arguments:
+            key = a.get("key", None)
+            if key is None:
+                continue
+            num = a.get("num", None)
             if num is None:
                 continue
             match num:
                 case "1":
-                    parser.add_argument(dest, nargs=1)
+                    parser.add_argument(key, nargs=1)
                 case "0+":
-                    parser.add_argument(dest, nargs="*")
+                    parser.add_argument(key, nargs="*")
                 case "1+":
-                    parser.add_argument(dest, nargs="+")
+                    parser.add_argument(key, nargs="+")
                 case "0-1":
-                    parser.add_argument(dest, nargs="?")
+                    parser.add_argument(key, nargs="?")
                 case _:
                     raise ValueError("Invalid argument num: " + str(num))
 
