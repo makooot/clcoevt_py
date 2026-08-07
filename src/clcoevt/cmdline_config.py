@@ -30,13 +30,14 @@ def get(command, options):
     )
 
     if options is not None:
-        for dest in options:
-            name = options[dest].get("cmd", None)
+        for o in options:
+            key = o.get("key", None)
+            name = o.get("cmd", None)
             if name is None:
                 continue
-            opt_type = options[dest].get("type", None)
+            opt_type = o.get("type", None)
             add_argument_setting = {}
-            add_argument_setting["dest"] = dest
+            add_argument_setting["dest"] = key
             add_argument_setting["default"] = None
             match opt_type:
                 case "bool":

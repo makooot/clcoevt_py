@@ -42,10 +42,10 @@ def get(filename, options):
 
 
 def _geto(values, messages, tomlobj, options):
-    for dest in options:
-        option = options[dest]
-        name = option.get("toml", None)
-        value_type = option.get("type", None)
+    for o in options:
+        key = o.get("key", None)
+        name = o.get("toml", None)
+        value_type = o.get("type", None)
         match value_type:
             case "int":
                 convertor = thru_int
@@ -55,12 +55,12 @@ def _geto(values, messages, tomlobj, options):
                 convertor = thru_bool
             case _:
                 convertor = None
-        if name is None or convertor is None or dest is None:
-            messages.append(MessageInvalidSetting(option))
+        if name is None or convertor is None or key is None:
+            messages.append(MessageInvalidSetting(o))
             continue
         if name in tomlobj:
             try:
-                setattr(values, dest, convertor(tomlobj[name]))
+                setattr(values, key, convertor(tomlobj[name]))
             except ValueError:
                 messages.append(MessageInvalidTomlValue(name, tomlobj[name]))
 

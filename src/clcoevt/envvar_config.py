@@ -6,10 +6,10 @@ from . import common
 def get(options):
     values = common.C()
     messages = []
-    for dest in options:
-        option = options[dest]
-        environmentVariableName = option.get("envvar", None)
-        option_type = option.get("type", None)
+    for o in options:
+        key = o.get("key", None)
+        environmentVariableName = o.get("envvar", None)
+        option_type = o.get("type", None)
         match option_type:
             case "int":
                 convertor = int
@@ -20,14 +20,14 @@ def get(options):
             case _:
                 convertor = None
         if environmentVariableName is None or convertor is None:
-            messages.append(MessageInvalidSetting(option))
+            messages.append(MessageInvalidSetting(o))
             continue
         if environmentVariableName not in os.environ:
             messages.append(MessageNotFound(environmentVariableName))
             continue
         value_string = os.environ[environmentVariableName]
         try:
-            setattr(values, dest, convertor(value_string))
+            setattr(values, key, convertor(value_string))
         except ValueError:
             messages.append(
                 MessageInvalidValue(

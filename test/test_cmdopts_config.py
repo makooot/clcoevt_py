@@ -9,20 +9,23 @@ class TestCmdsOptsConfig(unittest.TestCase):
             "cmdopts": {
                 "name": "TESTCMD_OPTS",
             },
-            "option": {
-                "host": {
+            "option": [
+                {
+                    "key": "host",
                     "cmd": ["--host"],
                     "type": "string",
                 },
-                "port": {
+                {
+                    "key": "port",
                     "cmd": ["--port"],
                     "type": "int",
                 },
-                "allow": {
+                {
+                    "key": "allow",
                     "cmd": ["--allow"],
                     "type": "bool",
                 },
-            },
+            ],
         }
 
         self.cmd_opts = "TESTCMD_OPTS"

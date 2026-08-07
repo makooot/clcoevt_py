@@ -28,10 +28,11 @@ class Clcoevt:
         self.tomlfile = values
 
         self.default = common.C()
-        for dest in options["options"]:
-            default = options["options"][dest].get("default", None)
+        for o in options["options"]:
+            key = o.get("key", None)
+            default = o.get("default", None)
             if default is not None:
-                setattr(self.default, dest, default)
+                setattr(self.default, key, default)
 
     def get(self, key):
         try:

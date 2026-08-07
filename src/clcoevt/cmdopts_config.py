@@ -118,13 +118,13 @@ def get(env, options):
     argparse_setting["suggest_on_error"] = True
     parser = argparse.ArgumentParser(**argparse_setting)
 
-    for dest in options:
-        option = options[dest]
-        name = option["cmd"]
+    for o in options:
+        key = o.get("key", None)
+        name = o.get("cmd", None)
         add_argument_setting = {}
-        add_argument_setting["dest"] = dest
+        add_argument_setting["dest"] = key
         add_argument_setting["default"] = None
-        match option["type"]:
+        match o["type"]:
             case "bool":
                 add_argument_setting["action"] = "store_true"
             case "string":

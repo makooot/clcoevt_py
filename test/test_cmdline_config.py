@@ -13,11 +13,11 @@ class TestEnvvarConfig(unittest.TestCase):
                     {"key": "file", "num": "0+"},
                 ],
             },
-            "options": {
-                "host": {"cmd": ["--host"], "type": "string"},
-                "port": {"cmd": ["--port"], "type": "int"},
-                "allow": {"cmd": ["--allow"], "type": "bool"},
-            },
+            "options": [
+                {"key": "host", "cmd": ["--host"], "type": "string"},
+                {"key": "port", "cmd": ["--port"], "type": "int"},
+                {"key": "allow", "cmd": ["--allow"], "type": "bool"},
+            ],
         }
 
     def test_invalid_setting_no_command_name(self):
@@ -42,9 +42,9 @@ class TestEnvvarConfig(unittest.TestCase):
                 "name": "testcmd",
                 "version": "1.2.3",
             },
-            "options": {
-                "opt1": {"cmd": ["--opt1"], "type": "unsuported_type"},
-            },
+            "options": [
+                {"key": "opt1", "cmd": ["--opt1"], "type": "unsuported_type"},
+            ],
         }
         with self.assertRaises(ValueError):
             cmdline_config.get(settings["command"], settings["options"])

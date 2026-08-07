@@ -5,11 +5,11 @@ import clcoevt.tomlfile_config as tomlfile_config
 class TestTomlfileConfig(unittest.TestCase):
     def setUp(self):
         self.clcoevt_config = {
-            "option": {
-                "host": {"toml": "HOST", "type": "string"},
-                "port": {"toml": "PORT", "type": "int"},
-                "allow": {"toml": "ALLOW", "type": "bool"},
-            },
+            "option": [
+                {"key": "host", "toml": "HOST", "type": "string"},
+                {"key": "port", "toml": "PORT", "type": "int"},
+                {"key": "allow", "toml": "ALLOW", "type": "bool"},
+            ]
         }
 
     def test_file_not_found(self):

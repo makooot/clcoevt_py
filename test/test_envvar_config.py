@@ -5,20 +5,17 @@ import clcoevt.envvar_config as envvar_config
 
 class TestEnvvarConfig(unittest.TestCase):
     def setUp(self):
-        self.options = {
-            "db_host": {"envvar": "DB_HOST", "type": "string"},
-            "db_port": {"envvar": "DB_PORT", "type": "int"},
-            "allow": {
-                "envvar": "ALLOW",
-                "type": "bool",
-            },
-        }
+        self.options = [
+            {"key": "db_host", "envvar": "DB_HOST", "type": "string"},
+            {"key": "db_port", "envvar": "DB_PORT", "type": "int"},
+            {"key": "allow", "envvar": "ALLOW", "type": "bool"},
+        ]
         os.environ["DB_HOST"] = ""
         os.environ["DB_PORT"] = "0"
         os.environ["ALLOW"] = "true"
 
     def test_invalid_envvars(self):
-        options = {"a": {"environmentVariable": "A"}}
+        options = [{"key": "a", "environmentVariable": "A"}]
         values, messages = envvar_config.get(options)
         self.assertEqual(messages[0].msgid, "INVALID_SETTING")
 
