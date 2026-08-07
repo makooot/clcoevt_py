@@ -21,29 +21,32 @@ class TestPackage(unittest.TestCase):
             "toml": {
                 "path": "test-data/test-package.toml",
             },
-            "options": {
-                "host": {
+            "options": [
+                {
+                    "key": "host",
                     "type": "string",
                     "default": "defaulthost",
                     "cmd": ["--host"],
                     "envvar": "HOST",
                     "toml": "HOST",
                 },
-                "port": {
+                {
+                    "key": "port",
                     "type": "int",
                     "default": 10080,
                     "cmd": ["--port"],
                     "envvar": "PORT",
                     "toml": "PORT",
                 },
-                "allow": {
+                {
+                    "key": "allow",
                     "type": "bool",
                     "default": False,
                     "cmd": ["-a", "--allow"],
                     "envvar": "ALLOW",
                     "toml": "ALLOW",
                 },
-            },
+            ],
         }
 
         os.environ["TESTCMD_OPTS"] = ""
