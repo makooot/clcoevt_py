@@ -13,7 +13,9 @@ command_details = {
         "usage": """\
         Usage: testcmd [options] [files...]
         """,
-        "arguments": {"file": {"num": "0+"}},
+        "arguments": [
+            { "key": "file", "num": "0+"},
+        ],
     },
     "cmdopts": {
         "name": "TESTCMD_OPTS",
@@ -21,29 +23,32 @@ command_details = {
     "toml": {
         "path": "test-data/test_clcoevt.toml",
     },
-    "options": {
-        "host": {
+    "options": [
+        {
+            "key": "host",
             "type": "string",
             "default": "defaulthost",
             "cmd": ["--host"],
             "envvar": "HOST",
             "toml": "HOST",
         },
-        "port": {
+        {
+            "key": "port",
             "type": "int",
             "default": 10080,
             "cmd": ["--port"],
             "envvar": "PORT",
             "toml": "PORT",
         },
-        "allow": {
+        {
+            "key": "allow",
             "type": "bool",
             "default": False,
             "cmd": ["-a", "--allow"],
             "envvar": "ALLOW",
             "toml": "ALLOW",
         },
-    },
+    ],
 }
 
 clco = clcoevt.Clcoevt(command_details)
