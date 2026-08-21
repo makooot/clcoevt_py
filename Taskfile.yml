@@ -58,12 +58,16 @@ tasks:
 
   test:
     desc: run tests on the src
+    env:
+      UV_VENV_CLEAR: 1
     deps: [ Is_venv_activated ]
     cmds:
       - nox
 
   test-package:
     desc: run tests on the installed package
+    env:
+        UV_VENV_CLEAR: 1
     deps: [ Is_venv_activated ]
     cmds:
       - nox -f noxfile-package.py
