@@ -28,28 +28,15 @@ tasks:
       - 'echo {{.TASKFILE}}'
     silent: true
 
-  Is_venv_activated:
-    internal: true
-    preconditions:
-      - sh: test -n "$VIRTUAL_ENV"
-        msg: |
-          Activate venv before this task.  Use the following command:
-          Linux, MacOS:
-              .venv/Scripts/Activate
-          Windows:
-              .venv\Scripts\Activate
-
   lint:
     desc: run linter
-    deps: [ Is_venv_activated ]
     cmds:
-      - ruff check
+      - uv run ruff check
 
   format:
     desc: run formatter
-    deps: [ Is_venv_activated ]
     cmds:
-      - ruff format
+      - uv run ruff format
 
   build:
     desc: build the package
@@ -60,17 +47,15 @@ tasks:
     desc: run tests on the src
     env:
       UV_VENV_CLEAR: 1
-    deps: [ Is_venv_activated ]
     cmds:
-      - nox
+      - uv run nox
 
   test-package:
     desc: run tests on the installed package
     env:
         UV_VENV_CLEAR: 1
-    deps: [ Is_venv_activated ]
     cmds:
-      - nox -f noxfile-package.py
+      - uv run nox -f noxfile-package.py
 
   update-project:
     desc: Update this project
