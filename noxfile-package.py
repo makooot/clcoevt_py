@@ -5,6 +5,7 @@ from nox_uv import session
 
 nox.options.default_venv_backend = "uv"
 
+
 @session(python=["3.14"])
 def tests(s: nox.Session) -> None:
     """session for testing the package"""
