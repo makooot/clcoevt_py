@@ -19,4 +19,11 @@ dev = [
     "nox>=2025.11.12",
     "nox-uv>=0.6.3",
     "ruff>=0.14.3",
+    "ty>=0.0.73",
 ]
+
+[tool.ty.environment]
+root = ["./src", "./test", "./test_package"]
+
+[tool.ty.rules]
+all = "error"

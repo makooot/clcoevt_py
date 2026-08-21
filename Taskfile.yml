@@ -33,6 +33,12 @@ tasks:
     cmds:
       - uv run ruff check
 
+  typecheck:
+    desc: run type checker
+    cmds:
+      - uv run ty check
+    aliases: [ ty ]
+
   format:
     desc: run formatter
     cmds:
