@@ -1,9 +1,11 @@
 import unittest
 import sys
+import typing
 import clcoevt.cmdline_config as cmdline_config
 
 
 class TestEnvvarConfig(unittest.TestCase):
+    @typing.override
     def setUp(self):
         self.settings = {
             "command": {

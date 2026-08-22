@@ -1,3 +1,6 @@
+import typing
+
+
 class Message:
     class Severities:
         DEBUG = 7
@@ -33,6 +36,7 @@ class Message:
             self.severities = severities
         self.text = text
 
+    @typing.override
     def __str__(self):
         return (
             self.msgid + ": " + self.severity_string[self.severities] + ": " + self.text

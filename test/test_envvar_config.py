@@ -1,9 +1,11 @@
 import unittest
 import os
+import typing
 import clcoevt.envvar_config as envvar_config
 
 
 class TestEnvvarConfig(unittest.TestCase):
+    @typing.override
     def setUp(self):
         self.options = [
             {"key": "db_host", "envvar": "DB_HOST", "type": "string"},

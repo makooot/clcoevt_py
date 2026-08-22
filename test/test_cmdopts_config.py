@@ -1,9 +1,11 @@
 import unittest
 import os
+import typing
 import clcoevt.cmdopts_config as cmdopts_config
 
 
 class TestCmdsOptsConfig(unittest.TestCase):
+    @typing.override
     def setUp(self):
         self.settings = {
             "cmdopts": {

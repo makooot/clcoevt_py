@@ -1,10 +1,12 @@
 import unittest
 import sys
 import os
+import typing
 import clcoevt.clcoevt as clcoevt
 
 
 class TestPackage(unittest.TestCase):
+    @typing.override
     def setUp(self):
         self.options = {
             "command": {

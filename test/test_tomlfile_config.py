@@ -1,8 +1,10 @@
 import unittest
+import typing
 import clcoevt.tomlfile_config as tomlfile_config
 
 
 class TestTomlfileConfig(unittest.TestCase):
+    @typing.override
     def setUp(self):
         self.clcoevt_config = {
             "option": [
