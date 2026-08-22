@@ -2,64 +2,65 @@ import unittest
 import sys
 import typing
 import clcoevt.cmdline_config as cmdline_config
+import clcoevt.types as types
 
 
 class TestEnvvarConfig(unittest.TestCase):
     @typing.override
     def setUp(self):
-        self.settings = {
-            "command": {
+        self.settings = types.ClcoevtCommandDetail(
+            command={
                 "name": "testcmd",
                 "version": "1.2.3",
                 "arguments": [
                     {"key": "file", "num": "0+"},
                 ],
             },
-            "options": [
+            options=[
                 {"key": "host", "cmd": ["--host"], "type": "string"},
                 {"key": "port", "cmd": ["--port"], "type": "int"},
                 {"key": "allow", "cmd": ["--allow"], "type": "bool"},
             ],
-        }
+        )
 
     def test_invalid_setting_no_command_name(self):
-        settings = {
-            "command": {},
-            "options": {},
-        }
+        settings = types.ClcoevtCommandDetail(
+            command={},
+            options=[],
+        )
         with self.assertRaises(ValueError):
             cmdline_config.get(settings["command"], settings["options"])
 
     def test_invalid_setting_no_command_version(self):
-        settings = {
-            "command": {"name": "testcmd"},
-            "options": {},
-        }
+        settings = types.ClcoevtCommandDetail(
+            command={"name": "testcmd"},
+            options=[],
+        )
         with self.assertRaises(ValueError):
             cmdline_config.get(settings["command"], settings["options"])
 
     def test_invalid_setting_unsuported_option_type(self):
-        settings = {
-            "command": {
+        settings = types.ClcoevtCommandDetail(
+            command={
                 "name": "testcmd",
                 "version": "1.2.3",
             },
-            "options": [
+            options=[
                 {"key": "opt1", "cmd": ["--opt1"], "type": "unsuported_type"},
             ],
-        }
+        )
         with self.assertRaises(ValueError):
             cmdline_config.get(settings["command"], settings["options"])
 
     def test_invalid_setting_invalid_argument_num(self):
-        settings = {
-            "command": {
+        settings = types.ClcoevtCommandDetail(
+            command={
                 "name": "testcmd",
                 "version": "1.2.3",
                 "arguments": [{"key": "arg1", "num": "invalid_num"}],
             },
-            "options": {},
-        }
+            options=[],
+        )
         with self.assertRaises(ValueError):
             cmdline_config.get(settings["command"], settings["options"])
 

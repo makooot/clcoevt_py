@@ -2,32 +2,32 @@ from . import cmdline_config
 from . import cmdopts_config
 from . import envvar_config
 from . import tomlfile_config
-from . import common
+from . import types
 
 
 class Clcoevt:
     def __init__(self, options):
         values, messages = cmdline_config.get(options["command"], options["options"])
-        self.cmdline = values
+        self.cmdline: types.C = values
 
         # TODO: skip if '--no-cmd-opts' is specified
         # TODO: set variable name if '--cmd-opts' is specified
         values, messages = cmdopts_config.get(
             options["cmdopts"]["name"], options["options"]
         )
-        self.cmdopts = values
+        self.cmdopts: types.C = values
 
         # TODO: skip if '--no-env-var' is specified
         values, messages = envvar_config.get(options["options"])
-        self.envvar = values
+        self.envvar: types.C = values
 
         # TODO: skip if '--no-toml-file' is specified
         values, messages = tomlfile_config.get(
             options["toml"]["path"], options["options"]
         )
-        self.tomlfile = values
+        self.tomlfile: types.C = values
 
-        self.default = common.C()
+        self.default: types.C = types.C()
         for o in options["options"]:
             key = o.get("key", None)
             default = o.get("default", None)

@@ -1,7 +1,3 @@
-class C:
-    pass
-
-
 def str_to_bool(s):
     if s == "true":
         return True

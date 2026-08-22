@@ -1,13 +1,14 @@
 import os
 from .message import MessageInvalidValue, MessageNotFound, MessageInvalidSetting
 from . import common
+from . import types
 
 
-def get(options):
-    values = common.C()
+def get(options: list[types.ClcoevtCliOption]):
+    values = types.C()
     messages = []
     for o in options:
-        key = o.get("key", None)
+        key = o["key"]
         environmentVariableName = o.get("envvar", None)
         option_type = o.get("type", None)
         match option_type:

@@ -3,13 +3,14 @@ import sys
 import os
 import typing
 import clcoevt.clcoevt as clcoevt
+import clcoevt.types as types
 
 
 class TestClcoevt(unittest.TestCase):
     @typing.override
     def setUp(self):
-        self.options = {
-            "command": {
+        self.options = types.ClcoevtCommandDetail(
+            command={
                 "name": "testcmd",
                 "version": "1.2.3",
                 "usage": """\
@@ -19,13 +20,13 @@ class TestClcoevt(unittest.TestCase):
                     {"key": "file", "num": "0+"},
                 ],
             },
-            "cmdopts": {
+            cmdopts={
                 "name": "TESTCMD_OPTS",
             },
-            "toml": {
+            toml={
                 "path": "test-data/test_clcoevt.toml",
             },
-            "options": [
+            options=[
                 {
                     "key": "host",
                     "type": "string",
@@ -51,7 +52,7 @@ class TestClcoevt(unittest.TestCase):
                     "toml": "ALLOW",
                 },
             ],
-        }
+        )
 
         os.environ["TESTCMD_OPTS"] = ""
         os.environ["HOST"] = ""
@@ -66,21 +67,21 @@ class TestClcoevt(unittest.TestCase):
         os.environ["ALLOW"] = "false"
         clco = clcoevt.Clcoevt(self.options)
         self.assertIsInstance(clco, clcoevt.Clcoevt)
-        self.assertEqual(clco.default.host, "defaulthost")
-        self.assertEqual(clco.default.port, 10080)
-        self.assertEqual(clco.default.allow, False)
-        self.assertEqual(clco.tomlfile.host, "tomlhost")
-        self.assertEqual(clco.tomlfile.port, 11080)
-        self.assertEqual(clco.tomlfile.allow, True)
-        self.assertEqual(clco.envvar.host, "envhost")
-        self.assertEqual(clco.envvar.port, 12080)
-        self.assertEqual(clco.envvar.allow, False)
-        self.assertEqual(clco.cmdopts.host, "cmdopthost")
-        self.assertEqual(clco.cmdopts.port, 13080)
-        self.assertEqual(clco.cmdopts.allow, True)
-        self.assertEqual(clco.cmdline.host, "clihost")
-        self.assertEqual(clco.cmdline.port, 14080)
-        self.assertEqual(clco.cmdline.allow, True)
+        self.assertEqual(getattr(clco.default, "host"), "defaulthost")
+        self.assertEqual(getattr(clco.default, "port"), 10080)
+        self.assertEqual(getattr(clco.default, "allow"), False)
+        self.assertEqual(getattr(clco.tomlfile, "host"), "tomlhost")
+        self.assertEqual(getattr(clco.tomlfile, "port"), 11080)
+        self.assertEqual(getattr(clco.tomlfile, "allow"), True)
+        self.assertEqual(getattr(clco.envvar, "host"), "envhost")
+        self.assertEqual(getattr(clco.envvar, "port"), 12080)
+        self.assertEqual(getattr(clco.envvar, "allow"), False)
+        self.assertEqual(getattr(clco.cmdopts, "host"), "cmdopthost")
+        self.assertEqual(getattr(clco.cmdopts, "port"), 13080)
+        self.assertEqual(getattr(clco.cmdopts, "allow"), True)
+        self.assertEqual(getattr(clco.cmdline, "host"), "clihost")
+        self.assertEqual(getattr(clco.cmdline, "port"), 14080)
+        self.assertEqual(getattr(clco.cmdline, "allow"), True)
 
     def test_default_values(self):
         sys.argv = ["testcmd"]

@@ -1,9 +1,9 @@
 import argparse
-from . import common
+from . import types
 
 
-def get(command, options):
-    values = common.C()
+def get(command: types.ClcoevtCommand, options: list[types.ClcoevtCliOption]):
+    values = types.C()
     messages = []
 
     if "name" not in command:
@@ -11,17 +11,20 @@ def get(command, options):
     if "version" not in command:
         raise ValueError("version is required in command")
 
-    command_name = command.get("name", None)
-    command_version = command.get("version", None)
-    usage = command.get("usage", None)
-    arguments = command.get("arguments", None)
+    command_name: str = command.get("name", "")
+    command_version: str = command.get("version", "")
+    usage: str = command.get("usage", "")
+    arguments: list[types.ClcoevtCommandArguments] | None = command.get(
+        "arguments", None
+    )
 
-    argparse_setting = {}
-    argparse_setting["prog"] = command_name
-    argparse_setting["usage"] = usage
-    argparse_setting["description"] = None
-    argparse_setting["epilog"] = None
-    argparse_setting["add_help"] = False
+    argparse_setting = types.ArgumentParserSetting(
+        prog=command_name,
+        usage=usage,
+        add_help=False,
+        description=None,
+        epilog=None,
+    )
     parser = argparse.ArgumentParser(**argparse_setting)
 
     parser.add_argument("-h", "--help", action="help")
@@ -31,14 +34,15 @@ def get(command, options):
 
     if options is not None:
         for o in options:
-            key = o.get("key", None)
-            name = o.get("cmd", None)
+            key: str | None = o.get("key", None)
+            name: list[str] | None = o.get("cmd", None)
             if name is None:
                 continue
-            opt_type = o.get("type", None)
-            add_argument_setting = {}
-            add_argument_setting["dest"] = key
-            add_argument_setting["default"] = None
+            opt_type: str | None = o.get("type", None)
+            add_argument_setting = types.AddArgumentSetting(
+                dest=key,
+                default=None,
+            )
             match opt_type:
                 case "bool":
                     add_argument_setting["action"] = "store_true"

@@ -25,9 +25,9 @@ class Message:
 
     def __init__(
         self,
-        msgid="-",
-        severities=4,
-        text=None,
+        msgid: str = "-",
+        severities: int = 4,
+        text: str | None = None,
     ):
         self.msgid = msgid
         if severities < 0 or severities > 7:
@@ -39,7 +39,11 @@ class Message:
     @typing.override
     def __str__(self):
         return (
-            self.msgid + ": " + self.severity_string[self.severities] + ": " + self.text
+            self.msgid
+            + ": "
+            + self.severity_string[self.severities]
+            + ": "
+            + str(self.text)
         )
 
 

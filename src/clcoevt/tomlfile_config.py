@@ -5,7 +5,7 @@ from .message import (
     MessageInvalidTomlValue,
     MessageInvalidSetting,
 )
-from . import common
+from . import types
 
 
 def thru_str(value):
@@ -26,8 +26,8 @@ def thru_bool(value):
     raise ValueError
 
 
-def get(filename, options):
-    values = common.C()
+def get(filename: str, options: list[types.ClcoevtCliOption]):
+    values = types.C()
     messages = []
     try:
         with open(filename, "rb") as f:
@@ -41,11 +41,11 @@ def get(filename, options):
     return _geto(values, messages, tomlobj, options)
 
 
-def _geto(values, messages, tomlobj, options):
+def _geto(values, messages, tomlobj, options: list[types.ClcoevtCliOption]):
     for o in options:
-        key = o.get("key", None)
-        name = o.get("toml", None)
-        value_type = o.get("type", None)
+        key = o["key"]
+        name = o["toml"]
+        value_type = o["type"]
         match value_type:
             case "int":
                 convertor = thru_int

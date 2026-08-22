@@ -2,7 +2,7 @@ import argparse
 import os
 from enum import Enum
 from .message import MessageNotFound, MessageInvalidValueS, MessageInvalidType
-from . import common
+from . import types
 
 
 def separate_cmd_opts(s):
@@ -100,30 +100,32 @@ def separate_cmd_opts(s):
     return result
 
 
-def get(env, options):
-    values = common.C()
+def get(env: str, options: list[types.ClcoevtCliOption]):
+    values = types.C()
     messages = []
 
     if env not in os.environ:
         messages.append(MessageNotFound("Environment variable " + env))
         return values, messages
 
-    argparse_setting = {}
-    argparse_setting["prog"] = ""
-    argparse_setting["usage"] = ""
-    argparse_setting["description"] = ""
-    argparse_setting["epilog"] = ""
-    argparse_setting["add_help"] = False
-    argparse_setting["exit_on_error"] = False
-    argparse_setting["suggest_on_error"] = True
+    argparse_setting = types.ArgumentParserSetting(
+        prog="",
+        description="",
+        usage="",
+        epilog="",
+        add_help=False,
+        exit_on_error=False,
+        suggest_on_error=True,
+    )
     parser = argparse.ArgumentParser(**argparse_setting)
 
     for o in options:
-        key = o.get("key", None)
-        name = o.get("cmd", None)
-        add_argument_setting = {}
-        add_argument_setting["dest"] = key
-        add_argument_setting["default"] = None
+        key = o["key"]
+        name = o["cmd"]
+        add_argument_setting = types.AddArgumentSetting(
+            dest=key,
+            default=None,
+        )
         match o["type"]:
             case "bool":
                 add_argument_setting["action"] = "store_true"

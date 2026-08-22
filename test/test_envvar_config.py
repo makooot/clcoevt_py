@@ -2,22 +2,23 @@ import unittest
 import os
 import typing
 import clcoevt.envvar_config as envvar_config
+import clcoevt.types as types
 
 
 class TestEnvvarConfig(unittest.TestCase):
     @typing.override
     def setUp(self):
         self.options = [
-            {"key": "db_host", "envvar": "DB_HOST", "type": "string"},
-            {"key": "db_port", "envvar": "DB_PORT", "type": "int"},
-            {"key": "allow", "envvar": "ALLOW", "type": "bool"},
+            types.ClcoevtCliOption(key="db_host", envvar="DB_HOST", type="string"),
+            types.ClcoevtCliOption(key="db_port", envvar="DB_PORT", type="int"),
+            types.ClcoevtCliOption(key="allow", envvar="ALLOW", type="bool"),
         ]
         os.environ["DB_HOST"] = ""
         os.environ["DB_PORT"] = "0"
         os.environ["ALLOW"] = "true"
 
     def test_invalid_envvars(self):
-        options = [{"key": "a", "environmentVariable": "A"}]
+        options = [types.ClcoevtCliOption(key="a", envvar="A")]
         values, messages = envvar_config.get(options)
         self.assertEqual(messages[0].msgid, "INVALID_SETTING")
 

@@ -3,13 +3,14 @@ import sys
 import os
 import typing
 import clcoevt.clcoevt as clcoevt
+import clcoevt.types as types
 
 
 class TestPackage(unittest.TestCase):
     @typing.override
     def setUp(self):
-        self.options = {
-            "command": {
+        self.options = types.ClcoevtCommandDetail(
+            command={
                 "name": "testcmd",
                 "version": "1.2.3",
                 "usage": """\
@@ -17,13 +18,13 @@ class TestPackage(unittest.TestCase):
                 """,
                 "arguments": [{"key": "file", "num": "0+"}],
             },
-            "cmdopts": {
+            cmdopts={
                 "name": "TESTCMD_OPTS",
             },
-            "toml": {
+            toml={
                 "path": "test-data/test-package.toml",
             },
-            "options": [
+            options=[
                 {
                     "key": "host",
                     "type": "string",
@@ -49,7 +50,7 @@ class TestPackage(unittest.TestCase):
                     "toml": "ALLOW",
                 },
             ],
-        }
+        )
 
         os.environ["TESTCMD_OPTS"] = ""
         os.environ["HOST"] = ""

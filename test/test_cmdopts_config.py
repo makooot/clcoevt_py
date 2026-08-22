@@ -2,16 +2,17 @@ import unittest
 import os
 import typing
 import clcoevt.cmdopts_config as cmdopts_config
+import clcoevt.types as types
 
 
 class TestCmdsOptsConfig(unittest.TestCase):
     @typing.override
     def setUp(self):
-        self.settings = {
-            "cmdopts": {
+        self.settings = types.ClcoevtCommandDetail(
+            cmdopts={
                 "name": "TESTCMD_OPTS",
             },
-            "options": [
+            options=[
                 {
                     "key": "host",
                     "cmd": ["--host"],
@@ -28,7 +29,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
                     "type": "bool",
                 },
             ],
-        }
+        )
 
         self.cmd_opts = "TESTCMD_OPTS"
         os.environ[self.cmd_opts] = ""

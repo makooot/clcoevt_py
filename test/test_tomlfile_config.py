@@ -1,6 +1,7 @@
 import unittest
 import typing
 import clcoevt.tomlfile_config as tomlfile_config
+import clcoevt.types as types
 
 
 class TestTomlfileConfig(unittest.TestCase):
@@ -8,9 +9,9 @@ class TestTomlfileConfig(unittest.TestCase):
     def setUp(self):
         self.clcoevt_config = {
             "options": [
-                {"key": "host", "toml": "HOST", "type": "string"},
-                {"key": "port", "toml": "PORT", "type": "int"},
-                {"key": "allow", "toml": "ALLOW", "type": "bool"},
+                types.ClcoevtCliOption(key="host", toml="HOST", type="string"),
+                types.ClcoevtCliOption(key="port", toml="PORT", type="int"),
+                types.ClcoevtCliOption(key="allow", toml="ALLOW", type="bool"),
             ]
         }
 
