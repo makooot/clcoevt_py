@@ -9,7 +9,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
             "cmdopts": {
                 "name": "TESTCMD_OPTS",
             },
-            "option": [
+            "options": [
                 {
                     "key": "host",
                     "cmd": ["--host"],
@@ -34,7 +34,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_no_cmd_opts(self):
         del os.environ[self.cmd_opts]
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 0)
         self.assertEqual(messages[0].msgid, "NOT_FOUND")
@@ -45,7 +45,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_null(self):
         os.environ[self.cmd_opts] = ""
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 0)
         self.assertEqual(len(messages), 0)
@@ -53,7 +53,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_invalid_opt(self):
         os.environ[self.cmd_opts] = "invalid"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 0)
         self.assertEqual(len(messages), 1)
@@ -62,7 +62,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_string_1(self):
         os.environ[self.cmd_opts] = "--host=localhost"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 1)
         self.assertEqual(values.host, "localhost")
@@ -71,7 +71,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_string_2(self):
         os.environ[self.cmd_opts] = "--host localhost"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 1)
         self.assertEqual(values.host, "localhost")
@@ -80,7 +80,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_null_string(self):
         os.environ[self.cmd_opts] = "--host="
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 1)
         self.assertEqual(values.host, "")
@@ -89,7 +89,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_int_1(self):
         os.environ[self.cmd_opts] = "--port=12345"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 1)
         self.assertEqual(values.port, 12345)
@@ -98,7 +98,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_int_2(self):
         os.environ[self.cmd_opts] = "--port 12345"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 1)
         self.assertEqual(values.port, 12345)
@@ -107,7 +107,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_bool(self):
         os.environ[self.cmd_opts] = "--allow"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 1)
         self.assertTrue(values.allow)
@@ -116,7 +116,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_no_value_string(self):
         os.environ[self.cmd_opts] = "--host"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 0)
         self.assertEqual(len(messages), 1)
@@ -125,7 +125,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_invalid_type_int(self):
         os.environ[self.cmd_opts] = "--port=x"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 0)
         self.assertEqual(len(messages), 1)
@@ -134,7 +134,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_no_value_int(self):
         os.environ[self.cmd_opts] = "--port"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 0)
         self.assertEqual(len(messages), 1)
@@ -143,7 +143,7 @@ class TestCmdsOptsConfig(unittest.TestCase):
     def test_unnecessary_value_bool(self):
         os.environ[self.cmd_opts] = "--allow=0"
         values, messages = cmdopts_config.get(
-            self.settings["cmdopts"]["name"], self.settings["option"]
+            self.settings["cmdopts"]["name"], self.settings["options"]
         )
         self.assertEqual(len(vars(values)), 0)
         self.assertEqual(len(messages), 1)
