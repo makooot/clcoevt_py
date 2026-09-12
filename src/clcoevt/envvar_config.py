@@ -1,12 +1,14 @@
 import os
-from .message import MessageInvalidValue, MessageNotFound, MessageInvalidSetting
 from . import common
-from . import types
+from .types import ClcoevtCliOption, ClcoevtParserResult
 
 
-def get(options: list[types.ClcoevtCliOption]):
-    values = types.C()
-    messages = []
+def get(
+    options: list[ClcoevtCliOption],
+) -> tuple[ClcoevtParserResult, list[UserWarning]]:
+    values: ClcoevtParserResult = {}
+    warn_log: list[UserWarning] = []
+
     for o in options:
         key = o["key"]
         environmentVariableName = o.get("envvar", None)
@@ -21,19 +23,22 @@ def get(options: list[types.ClcoevtCliOption]):
             case _:
                 convertor = None
         if environmentVariableName is None or convertor is None:
-            messages.append(MessageInvalidSetting(o))
+            warn_log.append(UserWarning(f"Invalid setting: {o}"))
             continue
         if environmentVariableName not in os.environ:
-            messages.append(MessageNotFound(environmentVariableName))
+            warn_log.append(
+                UserWarning(
+                    f"Environment variable not found: {environmentVariableName}"
+                )
+            )
             continue
         value_string = os.environ[environmentVariableName]
         try:
-            setattr(values, key, convertor(value_string))
+            values[key] = convertor(value_string)
         except ValueError:
-            messages.append(
-                MessageInvalidValue(
-                    environmentVariableName,
-                    value_string,
+            warn_log.append(
+                UserWarning(
+                    f"Invalid value for {environmentVariableName}: {value_string}"
                 )
             )
-    return values, messages
+    return values, warn_log

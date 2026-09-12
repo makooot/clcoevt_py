@@ -45,8 +45,8 @@ class Clcoevt:
             pass
 
         try:
-            return getattr(self.envvar, key)
-        except AttributeError:
+            return self.envvar[key]
+        except KeyError:
             pass
 
         try:
