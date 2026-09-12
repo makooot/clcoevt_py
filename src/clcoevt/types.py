@@ -42,9 +42,9 @@ type ClcoevtParserResult = dict[str, str | int | bool | None | list[str]]
 class ClcoevtCommandValues(TypedDict, total=False):
     cmdline: ClcoevtParserResult
     cmdopts: ClcoevtParserResult
-    envvar: C
-    tomlfile: C
-    default: C
+    envvar: ClcoevtParserResult
+    tomlfile: ClcoevtParserResult
+    default: ClcoevtParserResult
 
 
 class ClcoevtShowHelpException(Exception):

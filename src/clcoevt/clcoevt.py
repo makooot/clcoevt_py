@@ -2,11 +2,11 @@ from . import cmdline_config
 from . import cmdopts_config
 from . import envvar_config
 from . import tomlfile_config
-from . import types
+from .types import ClcoevtCommandDetail, ClcoevtParserResult
 
 
 class Clcoevt:
-    def __init__(self, options: types.ClcoevtCommandDetail):
+    def __init__(self, options: ClcoevtCommandDetail):
         values, unnamed = cmdline_config.cmdline_get(options)
         self.cmdline = values
         self.args = unnamed
@@ -24,14 +24,14 @@ class Clcoevt:
         values, _ = tomlfile_config.get(options["toml"]["path"], options["options"])
         self.tomlfile = values
 
-        self.default: types.C = types.C()
+        self.default: ClcoevtParserResult = {}
         for o in options["options"]:
             key = o.get("key", None)
             if key is None:
                 break
             default = o.get("default", None)
             if default is not None:
-                setattr(self.default, key, default)
+                self.default[key] = default
 
     def get(self, key):
         try:
@@ -55,6 +55,6 @@ class Clcoevt:
             pass
 
         try:
-            return getattr(self.default, key)
-        except AttributeError as e:
+            return self.default[key]
+        except KeyError as e:
             raise e

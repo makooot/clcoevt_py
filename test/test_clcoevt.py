@@ -58,9 +58,9 @@ class TestClcoevt(unittest.TestCase):
         os.environ["ALLOW"] = "false"
         clco = clcoevt.Clcoevt(self.options)
         self.assertIsInstance(clco, clcoevt.Clcoevt)
-        self.assertEqual(getattr(clco.default, "host"), "defaulthost")
-        self.assertEqual(getattr(clco.default, "port"), 10080)
-        self.assertEqual(getattr(clco.default, "allow"), False)
+        self.assertEqual(clco.default["host"], "defaulthost")
+        self.assertEqual(clco.default["port"], 10080)
+        self.assertEqual(clco.default["allow"], False)
         self.assertEqual(clco.tomlfile["host"], "tomlhost")
         self.assertEqual(clco.tomlfile["port"], 11080)
         self.assertEqual(clco.tomlfile["allow"], True)
