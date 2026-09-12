@@ -28,7 +28,7 @@ class Clcoevt:
         for o in options["options"]:
             key = o.get("key", None)
             if key is None:
-                break
+                continue
             default = o.get("default", None)
             if default is not None:
                 self.default[key] = default
