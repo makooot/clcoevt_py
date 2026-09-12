@@ -47,7 +47,7 @@ tasks:
   build:
     desc: build the package
     cmds:
-      - uv build
+      - uv build --clear
 
   test:
     desc: run tests on the src
