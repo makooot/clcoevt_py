@@ -10,14 +10,7 @@ class TestPackage(unittest.TestCase):
     @typing.override
     def setUp(self):
         self.options = types.ClcoevtCommandDetail(
-            command={
-                "name": "testcmd",
-                "version": "1.2.3",
-                "usage": """\
-                Usage: testcmd [options] [files...]
-                """,
-                "arguments": [{"key": "file", "num": "0+"}],
-            },
+            cmdline={},
             cmdopts={
                 "name": "TESTCMD_OPTS",
             },

@@ -1,83 +1,47 @@
-import argparse
-from . import types
+from fruits_skewers.skewer import skewer_parser
+from fruits_skewers.types import (
+    SkewerOption,
+    SkewerCommandDetail,
+    SkewerShowHelpException,
+    SkewerShowVersionException,
+    SkewerValueError,
+)
+from .types import (
+    ClcoevtCommandDetail,
+    ClcoevtParserResult,
+    ClcoevtShowHelpException,
+    ClcoevtShowVersionException,
+    ClcoevtValueError,
+)
 
 
-def get(command: types.ClcoevtCommand, options: list[types.ClcoevtCliOption]):
-    values = types.C()
-    messages = []
+def cmdline_get(
+    command_detail: ClcoevtCommandDetail, args: list[str] | None = None
+) -> tuple[ClcoevtParserResult, list[str]]:
+    skewer_command_detail: SkewerCommandDetail = {
+        "cmdline": command_detail.get("cmdline", {}),
+        "options": [],
+    }
+    for o in command_detail.get("options", []):
+        key = o.get("key", None)
+        if key is None:
+            continue
+        cmd = o.get("cmd", [])
+        if len(cmd) == 0:
+            continue
+        skewer_option: SkewerOption = {
+            "key": key,
+            "type": o.get("type", "string"),
+            "cmd": cmd,
+        }
+        skewer_command_detail["options"].append(skewer_option)
 
-    if "name" not in command:
-        raise ValueError("name is required in command")
-    if "version" not in command:
-        raise ValueError("version is required in command")
-
-    command_name: str = command.get("name", "")
-    command_version: str = command.get("version", "")
-    usage: str = command.get("usage", "")
-    arguments: list[types.ClcoevtCommandArguments] | None = command.get(
-        "arguments", None
-    )
-
-    argparse_setting = types.ArgumentParserSetting(
-        prog=command_name,
-        usage=usage,
-        add_help=False,
-        description=None,
-        epilog=None,
-    )
-    parser = argparse.ArgumentParser(**argparse_setting)
-
-    parser.add_argument("-h", "--help", action="help")
-    parser.add_argument(
-        "-v", "--version", action="version", version="%(prog)s " + command_version
-    )
-
-    if options is not None:
-        for o in options:
-            key: str | None = o.get("key", None)
-            name: list[str] | None = o.get("cmd", None)
-            if name is None:
-                continue
-            opt_type: str | None = o.get("type", None)
-            add_argument_setting = types.AddArgumentSetting(
-                dest=key,
-                default=None,
-            )
-            match opt_type:
-                case "bool":
-                    add_argument_setting["action"] = "store_true"
-                case "string":
-                    add_argument_setting["action"] = "store"
-                case "int":
-                    add_argument_setting["action"] = "store"
-                    add_argument_setting["type"] = int
-                case _:
-                    raise ValueError("Invalid option type: " + str(opt_type))
-
-            parser.add_argument(*name, **add_argument_setting)
-
-    if arguments is not None:
-        for a in arguments:
-            key = a.get("key", None)
-            if key is None:
-                continue
-            num = a.get("num", None)
-            if num is None:
-                continue
-            match num:
-                case "1":
-                    parser.add_argument(key, nargs=1)
-                case "0+":
-                    parser.add_argument(key, nargs="*")
-                case "1+":
-                    parser.add_argument(key, nargs="+")
-                case "0-1":
-                    parser.add_argument(key, nargs="?")
-                case _:
-                    raise ValueError("Invalid argument num: " + str(num))
-
-    args = parser.parse_args()
-    for k, v in vars(args).items():
-        if v is not None:
-            setattr(values, k, v)
-    return values, messages
+    try:
+        values, unnamed = skewer_parser(skewer_command_detail, args)
+    except SkewerShowHelpException:
+        raise ClcoevtShowHelpException()
+    except SkewerShowVersionException:
+        raise ClcoevtShowVersionException()
+    except SkewerValueError as e:
+        raise ClcoevtValueError(e.args[0])
+    return values, unnamed

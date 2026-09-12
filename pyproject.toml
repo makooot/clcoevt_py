@@ -8,7 +8,9 @@ authors = [
     { name = "HASHIGAYA, Makoto", email = "6903330+makooot@users.noreply.github.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "fruits-skewers==0.7.0",
+]
 
 [build-system]
 requires = ["uv_build>=0.8.19,<0.9.0"]

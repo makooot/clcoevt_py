@@ -6,43 +6,42 @@ from . import types
 
 
 class Clcoevt:
-    def __init__(self, options):
-        values, messages = cmdline_config.get(options["command"], options["options"])
-        self.cmdline: types.C = values
+    def __init__(self, options: types.ClcoevtCommandDetail):
+        values, unnamed = cmdline_config.cmdline_get(options)
+        self.cmdline = values
+        self.args = unnamed
 
         # TODO: skip if '--no-cmd-opts' is specified
         # TODO: set variable name if '--cmd-opts' is specified
-        values, messages = cmdopts_config.get(
-            options["cmdopts"]["name"], options["options"]
-        )
-        self.cmdopts: types.C = values
+        values, _ = cmdopts_config.cmdopts_get(options)
+        self.cmdopts = values
 
         # TODO: skip if '--no-env-var' is specified
-        values, messages = envvar_config.get(options["options"])
-        self.envvar: types.C = values
+        values, _ = envvar_config.get(options["options"])
+        self.envvar = values
 
         # TODO: skip if '--no-toml-file' is specified
-        values, messages = tomlfile_config.get(
-            options["toml"]["path"], options["options"]
-        )
-        self.tomlfile: types.C = values
+        values, _ = tomlfile_config.get(options["toml"]["path"], options["options"])
+        self.tomlfile = values
 
         self.default: types.C = types.C()
         for o in options["options"]:
             key = o.get("key", None)
+            if key is None:
+                break
             default = o.get("default", None)
             if default is not None:
                 setattr(self.default, key, default)
 
     def get(self, key):
         try:
-            return getattr(self.cmdline, key)
-        except AttributeError:
+            return self.cmdline[key]
+        except KeyError:
             pass
 
         try:
-            return getattr(self.cmdopts, key)
-        except AttributeError:
+            return self.cmdopts[key]
+        except KeyError:
             pass
 
         try:

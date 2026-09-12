@@ -1,8 +1,12 @@
-import argparse
 import os
 from enum import Enum
-from .message import MessageNotFound, MessageInvalidValueS, MessageInvalidType
-from . import types
+from fruits_skewers.skewer import skewer_parser
+from fruits_skewers.types import (
+    SkewerOption,
+    SkewerCommandDetail,
+    SkewerValueError,
+)
+from .types import ClcoevtCommandDetail, ClcoevtValueError, ClcoevtParserResult
 
 
 def separate_cmd_opts(s):
@@ -100,54 +104,45 @@ def separate_cmd_opts(s):
     return result
 
 
-def get(env: str, options: list[types.ClcoevtCliOption]):
-    values = types.C()
-    messages = []
-
-    if env not in os.environ:
-        messages.append(MessageNotFound("Environment variable " + env))
-        return values, messages
-
-    argparse_setting = types.ArgumentParserSetting(
-        prog="",
-        description="",
-        usage="",
-        epilog="",
-        add_help=False,
-        exit_on_error=False,
-        suggest_on_error=True,
-    )
-    parser = argparse.ArgumentParser(**argparse_setting)
-
-    for o in options:
-        key = o["key"]
-        name = o["cmd"]
-        add_argument_setting = types.AddArgumentSetting(
-            dest=key,
-            default=None,
-        )
-        match o["type"]:
-            case "bool":
-                add_argument_setting["action"] = "store_true"
-            case "string":
-                add_argument_setting["action"] = "store"
-            case "int":
-                add_argument_setting["action"] = "store"
-                add_argument_setting["type"] = int
-
-        parser.add_argument(*name, **add_argument_setting)
+def cmdopts_get(
+    command_detail: ClcoevtCommandDetail,
+) -> tuple[ClcoevtParserResult, list[UserWarning]]:
+    values: ClcoevtParserResult = {}
+    warn_log: list[UserWarning] = []
 
     try:
-        args = parser.parse_args(separate_cmd_opts(os.environ[env]))
-    except argparse.ArgumentError as e:
-        messages.append(MessageInvalidValueS(str(e)))
-        return values, messages
-    except argparse.ArgumentTypeError as e:
-        messages.append(MessageInvalidType(str(e)))
-        return values, messages
+        env = command_detail["cmdopts"]["name"]
+    except KeyError:
+        raise ClcoevtValueError("Not found: cmdopts.name in command_detail")
 
-    for k, v in vars(args).items():
-        if v is not None:
-            setattr(values, k, v)
+    if env not in os.environ:
+        return values, warn_log
 
-    return values, messages
+    args = separate_cmd_opts(os.environ[env])
+    skewer_command_detail: SkewerCommandDetail = {
+        "cmdline": {
+            "help_option": [],
+            "version_option": [],
+        },
+        "options": [],
+    }
+    for o in command_detail.get("options", []):
+        key = o.get("key", None)
+        if key is None:
+            continue
+        cmd = o.get("cmd", [])
+        if len(cmd) == 0:
+            continue
+        skewer_option: SkewerOption = {
+            "key": key,
+            "type": o.get("type", "string"),
+            "cmd": cmd,
+        }
+        skewer_command_detail["options"].append(skewer_option)
+
+    try:
+        values, _ = skewer_parser(skewer_command_detail, args)
+    except SkewerValueError as e:
+        warn_log.append(UserWarning(e.args[0]))
+
+    return values, warn_log

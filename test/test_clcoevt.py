@@ -10,16 +10,7 @@ class TestClcoevt(unittest.TestCase):
     @typing.override
     def setUp(self):
         self.options = types.ClcoevtCommandDetail(
-            command={
-                "name": "testcmd",
-                "version": "1.2.3",
-                "usage": """\
-                Usage: testcmd [options] [files...]
-                """,
-                "arguments": [
-                    {"key": "file", "num": "0+"},
-                ],
-            },
+            cmdline={},
             cmdopts={
                 "name": "TESTCMD_OPTS",
             },
@@ -76,12 +67,12 @@ class TestClcoevt(unittest.TestCase):
         self.assertEqual(getattr(clco.envvar, "host"), "envhost")
         self.assertEqual(getattr(clco.envvar, "port"), 12080)
         self.assertEqual(getattr(clco.envvar, "allow"), False)
-        self.assertEqual(getattr(clco.cmdopts, "host"), "cmdopthost")
-        self.assertEqual(getattr(clco.cmdopts, "port"), 13080)
-        self.assertEqual(getattr(clco.cmdopts, "allow"), True)
-        self.assertEqual(getattr(clco.cmdline, "host"), "clihost")
-        self.assertEqual(getattr(clco.cmdline, "port"), 14080)
-        self.assertEqual(getattr(clco.cmdline, "allow"), True)
+        self.assertEqual(clco.cmdopts["host"], "cmdopthost")
+        self.assertEqual(clco.cmdopts["port"], 13080)
+        self.assertEqual(clco.cmdopts["allow"], True)
+        self.assertEqual(clco.cmdline["host"], "clihost")
+        self.assertEqual(clco.cmdline["port"], 14080)
+        self.assertEqual(clco.cmdline["allow"], True)
 
     def test_default_values(self):
         sys.argv = ["testcmd"]

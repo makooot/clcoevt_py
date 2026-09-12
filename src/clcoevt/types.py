@@ -1,40 +1,14 @@
-from typing import TypedDict, Any
-from argparse import Action
+from typing import TypedDict
 
 
 class C:
     pass
 
 
-# argparse settings
-class ArgumentParserSetting(TypedDict, total=False):
-    prog: str
-    description: str | None
-    usage: str | None
-    epilog: str | None
-    add_help: bool
-    exit_on_error: bool
-    suggest_on_error: bool
-
-
-class AddArgumentSetting(TypedDict, total=False):
-    dest: str | None
-    default: str | int | bool | None
-    action: str | type[Action]
-    type: Any
-
-
 # clcoevt command detail
-class ClcoevtCommandArguments(TypedDict, total=False):
-    key: str
-    num: str | None
-
-
-class ClcoevtCommand(TypedDict, total=False):
-    name: str
-    version: str
-    usage: str
-    arguments: list[ClcoevtCommandArguments]
+class ClcoevtCmdline(TypedDict, total=False):
+    help_option: list[str]
+    version_option: list[str]
 
 
 class ClcoevtCmdopts(TypedDict, total=False):
@@ -55,16 +29,31 @@ class ClcoevtCliOption(TypedDict, total=False):
 
 
 class ClcoevtCommandDetail(TypedDict, total=False):
-    command: ClcoevtCommand
+    options: list[ClcoevtCliOption]
+    cmdline: ClcoevtCmdline
     cmdopts: ClcoevtCmdopts
     toml: ClcoevtToml
-    options: list[ClcoevtCliOption]
 
 
 # clcoevt command values
+type ClcoevtParserResult = dict[str, str | int | bool | None | list[str]]
+
+
 class ClcoevtCommandValues(TypedDict, total=False):
-    cmdline: C
-    cmdopts: C
+    cmdline: ClcoevtParserResult
+    cmdopts: ClcoevtParserResult
     envvar: C
     tomlfile: C
     default: C
+
+
+class ClcoevtShowHelpException(Exception):
+    pass
+
+
+class ClcoevtShowVersionException(Exception):
+    pass
+
+
+class ClcoevtValueError(Exception):
+    pass
