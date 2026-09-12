@@ -1,11 +1,5 @@
 import tomllib
-from .message import (
-    MessageFileNotFound,
-    MessageInvalidTomlFile,
-    MessageInvalidTomlValue,
-    MessageInvalidSetting,
-)
-from . import types
+from .types import ClcoevtCliOption, ClcoevtParserResult
 
 
 def thru_str(value):
@@ -26,22 +20,29 @@ def thru_bool(value):
     raise ValueError
 
 
-def get(filename: str, options: list[types.ClcoevtCliOption]):
-    values = types.C()
-    messages = []
+def get(
+    filename: str, options: list[ClcoevtCliOption]
+) -> tuple[ClcoevtParserResult, list[UserWarning]]:
+    values: ClcoevtParserResult = {}
+    warn_log: list[UserWarning] = []
     try:
         with open(filename, "rb") as f:
             tomlobj = tomllib.load(f)
     except FileNotFoundError:
-        messages.append(MessageFileNotFound(filename))
-        return values, messages
+        warn_log.append(UserWarning(f"File not found: {filename}"))
+        return values, warn_log
     except tomllib.TOMLDecodeError:
-        messages.append(MessageInvalidTomlFile(filename))
-        return values, messages
-    return _geto(values, messages, tomlobj, options)
+        warn_log.append(UserWarning(f"Invalid TOML file: {filename}"))
+        return values, warn_log
+    return _geto(values, warn_log, tomlobj, options)
 
 
-def _geto(values, messages, tomlobj, options: list[types.ClcoevtCliOption]):
+def _geto(
+    values: ClcoevtParserResult,
+    warn_log: list[UserWarning],
+    tomlobj,
+    options: list[ClcoevtCliOption],
+) -> tuple[ClcoevtParserResult, list[UserWarning]]:
     for o in options:
         key = o["key"]
         name = o["toml"]
@@ -56,12 +57,14 @@ def _geto(values, messages, tomlobj, options: list[types.ClcoevtCliOption]):
             case _:
                 convertor = None
         if name is None or convertor is None or key is None:
-            messages.append(MessageInvalidSetting(o))
+            warn_log.append(UserWarning(f"Invalid setting: {o}"))
             continue
         if name in tomlobj:
             try:
-                setattr(values, key, convertor(tomlobj[name]))
+                values[key] = convertor(tomlobj[name])
             except ValueError:
-                messages.append(MessageInvalidTomlValue(name, tomlobj[name]))
+                warn_log.append(
+                    UserWarning(f"Invalid value for {name}: {tomlobj[name]}")
+                )
 
-    return values, messages
+    return values, warn_log

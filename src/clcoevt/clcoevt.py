@@ -50,8 +50,8 @@ class Clcoevt:
             pass
 
         try:
-            return getattr(self.tomlfile, key)
-        except AttributeError:
+            return self.tomlfile[key]
+        except KeyError:
             pass
 
         try:
