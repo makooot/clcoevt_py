@@ -20,7 +20,7 @@ def thru_bool(value):
     raise ValueError
 
 
-def get(
+def tomlfile_get(
     filename: str, options: list[ClcoevtCliOption]
 ) -> tuple[ClcoevtParserResult, list[UserWarning]]:
     values: ClcoevtParserResult = {}
@@ -34,10 +34,10 @@ def get(
     except tomllib.TOMLDecodeError:
         warn_log.append(UserWarning(f"Invalid TOML file: {filename}"))
         return values, warn_log
-    return _geto(values, warn_log, tomlobj, options)
+    return tomlfile_geto(values, warn_log, tomlobj, options)
 
 
-def _geto(
+def tomlfile_geto(
     values: ClcoevtParserResult,
     warn_log: list[UserWarning],
     tomlobj,

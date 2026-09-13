@@ -1,27 +1,27 @@
-from . import cmdline_config
-from . import cmdopts_config
-from . import envvar_config
-from . import tomlfile_config
+from .cmdline_config import cmdline_get
+from .cmdopts_config import cmdopts_get
+from .envvar_config import envvar_get
+from .tomlfile_config import tomlfile_get
 from .types import ClcoevtCommandDetail, ClcoevtParserResult
 
 
 class Clcoevt:
     def __init__(self, options: ClcoevtCommandDetail):
-        values, unnamed = cmdline_config.cmdline_get(options)
+        values, unnamed = cmdline_get(options)
         self.cmdline = values
         self.args = unnamed
 
         # TODO: skip if '--no-cmd-opts' is specified
         # TODO: set variable name if '--cmd-opts' is specified
-        values, _ = cmdopts_config.cmdopts_get(options)
+        values, _ = cmdopts_get(options)
         self.cmdopts = values
 
         # TODO: skip if '--no-env-var' is specified
-        values, _ = envvar_config.get(options["options"])
+        values, _ = envvar_get(options["options"])
         self.envvar = values
 
         # TODO: skip if '--no-toml-file' is specified
-        values, _ = tomlfile_config.get(options["toml"]["path"], options["options"])
+        values, _ = tomlfile_get(options["toml"]["path"], options["options"])
         self.tomlfile = values
 
         self.default: ClcoevtParserResult = {}

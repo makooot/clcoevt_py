@@ -3,7 +3,7 @@ from . import common
 from .types import ClcoevtCliOption, ClcoevtParserResult
 
 
-def get(
+def envvar_get(
     options: list[ClcoevtCliOption],
 ) -> tuple[ClcoevtParserResult, list[UserWarning]]:
     values: ClcoevtParserResult = {}
