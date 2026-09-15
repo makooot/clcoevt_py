@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 import typing
-import clcoevt.clcoevt as clcoevt
+import clcoevt.core as clcoevt
 import clcoevt.types as types
 
 

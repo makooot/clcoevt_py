@@ -2,14 +2,15 @@ import unittest
 import sys
 import os
 import typing
-import clcoevt.clcoevt as clcoevt
-import clcoevt.types as types
+#import clcoevt.core as clcoevt
+#import clcoevt.types as types
+import clcoevt
 
 
 class TestPackage(unittest.TestCase):
     @typing.override
     def setUp(self):
-        self.options = types.ClcoevtCommandDetail(
+        self.options = clcoevt.ClcoevtCommandDetail(
             cmdline={},
             cmdopts={
                 "name": "TESTCMD_OPTS",
