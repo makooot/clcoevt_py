@@ -105,3 +105,68 @@ class TestPackage(unittest.TestCase):
         self.assertEqual(clco.get("host"), "clihost")
         self.assertEqual(clco.get("port"), 14080)
         self.assertEqual(clco.get("allow"), True)
+
+    def test_empty_command_line_arguments(self):
+        sys.argv = ["testcmd"]
+        del os.environ["TESTCMD_OPTS"]
+        del os.environ["HOST"]
+        del os.environ["PORT"]
+        del os.environ["ALLOW"]
+        self.options["toml"]["path"] = "file-not-found.toml"
+        clco = clcoevt.Clcoevt(self.options)
+        self.assertEqual(clco.args, [])
+        self.assertEqual(clco.get("host"), "defaulthost")
+
+    def test_command_line_help_exception(self):
+        sys.argv = ["testcmd", "--help"]
+        with self.assertRaises(clcoevt.ClcoevtShowHelpException):
+            clcoevt.Clcoevt(self.options)
+
+    def test_command_line_version_exception(self):
+        sys.argv = ["testcmd", "--version"]
+        with self.assertRaises(clcoevt.ClcoevtShowVersionException):
+            clcoevt.Clcoevt(self.options)
+
+    def test_invalid_command_line_value(self):
+        sys.argv = ["testcmd", "--port", "not-an-integer"]
+        with self.assertRaises(clcoevt.ClcoevtValueError):
+            clcoevt.Clcoevt(self.options)
+
+    def test_invalid_environment_value_falls_back(self):
+        sys.argv = ["testcmd"]
+        del os.environ["TESTCMD_OPTS"]
+        os.environ["HOST"] = "envhost"
+        os.environ["PORT"] = "not-an-integer"
+        os.environ["ALLOW"] = "not-a-bool"
+        clco = clcoevt.Clcoevt(self.options)
+        self.assertEqual(clco.get("host"), "envhost")
+        self.assertEqual(clco.get("port"), 11080)
+        self.assertEqual(clco.get("allow"), True)
+
+    def test_empty_and_zero_values(self):
+        sys.argv = ["testcmd"]
+        del os.environ["TESTCMD_OPTS"]
+        os.environ["HOST"] = ""
+        os.environ["PORT"] = "0"
+        os.environ["ALLOW"] = "false"
+        self.options["toml"]["path"] = "file-not-found.toml"
+        clco = clcoevt.Clcoevt(self.options)
+        self.assertEqual(clco.get("host"), "")
+        self.assertEqual(clco.get("port"), 0)
+        self.assertEqual(clco.get("allow"), False)
+
+    def test_negative_integer_value(self):
+        sys.argv = ["testcmd"]
+        del os.environ["TESTCMD_OPTS"]
+        os.environ["HOST"] = "envhost"
+        os.environ["PORT"] = "-1"
+        os.environ["ALLOW"] = "false"
+        self.options["toml"]["path"] = "file-not-found.toml"
+        clco = clcoevt.Clcoevt(self.options)
+        self.assertEqual(clco.get("port"), -1)
+
+    def test_unknown_key(self):
+        sys.argv = ["testcmd"]
+        clco = clcoevt.Clcoevt(self.options)
+        with self.assertRaises(KeyError):
+            clco.get("unknown")
