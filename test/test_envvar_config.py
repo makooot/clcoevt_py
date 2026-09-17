@@ -70,17 +70,40 @@ class TestEnvvarConfig(unittest.TestCase):
     def test_null_bool(self):
         os.environ["ALLOW"] = ""
         values, warn_log = envvar_get(self.options)
-        self.assertFalse("allow" in values)
-        self.assertEqual(str(warn_log[0]), "Invalid value for ALLOW: ")
+        self.assertFalse(values["allow"])
 
     def test_invalid_bool(self):
         os.environ["ALLOW"] = "1"
         values, warn_log = envvar_get(self.options)
-        self.assertFalse("allow" in values)
-        self.assertEqual(str(warn_log[0]), "Invalid value for ALLOW: 1")
+        self.assertTrue(values["allow"])
 
     def test_true(self):
         os.environ["ALLOW"] = "true"
+        values, _ = envvar_get(self.options)
+        self.assertTrue(values["allow"])
+
+    def test_bool_t_is_true(self):
+        os.environ["ALLOW"] = "t"
+        values, _ = envvar_get(self.options)
+        self.assertTrue(values["allow"])
+
+    def test_bool_yes_is_true(self):
+        os.environ["ALLOW"] = "yes"
+        values, _ = envvar_get(self.options)
+        self.assertTrue(values["allow"])
+
+    def test_bool_y_is_true(self):
+        os.environ["ALLOW"] = "y"
+        values, _ = envvar_get(self.options)
+        self.assertTrue(values["allow"])
+
+    def test_bool_on_is_true(self):
+        os.environ["ALLOW"] = "on"
+        values, _ = envvar_get(self.options)
+        self.assertTrue(values["allow"])
+
+    def test_any_string_is_true(self):
+        os.environ["ALLOW"] = "anystring"
         values, _ = envvar_get(self.options)
         self.assertTrue(values["allow"])
 
@@ -88,3 +111,24 @@ class TestEnvvarConfig(unittest.TestCase):
         os.environ["ALLOW"] = "false"
         values, _ = envvar_get(self.options)
         self.assertFalse(values["allow"])
+
+    def test_bool_f_is_false(self):
+        os.environ["ALLOW"] = "f"
+        values, _ = envvar_get(self.options)
+        self.assertFalse(values["allow"])
+
+    def test_bool_no_is_false(self):
+        os.environ["ALLOW"] = "no"
+        values, _ = envvar_get(self.options)
+        self.assertFalse(values["allow"])
+
+    def test_bool_n_is_false(self):
+        os.environ["ALLOW"] = "n"
+        values, _ = envvar_get(self.options)
+        self.assertFalse(values["allow"])
+
+    def test_bool_off_is_false(self):
+        os.environ["ALLOW"] = "off"
+        values, _ = envvar_get(self.options)
+        self.assertFalse(values["allow"])
+
