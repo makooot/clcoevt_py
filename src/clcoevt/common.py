@@ -5,4 +5,4 @@ def str_to_bool(s):
     elif lower_s in ["false", "f", "no", "n", "off", "0"]:
         return False
     else:
-        return not s==""
+        return not s == ""

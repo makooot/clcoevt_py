@@ -48,7 +48,9 @@ class TestCmdsOptsConfig(unittest.TestCase):
 
     def test_separate_cmd_opts_quoted_words(self):
         self.assertEqual(
-            cmdopts_config.separate_cmd_opts("--host 'local host' --name \"test value\""),
+            cmdopts_config.separate_cmd_opts(
+                "--host 'local host' --name \"test value\""
+            ),
             ["--host", "local host", "--name", "test value"],
         )
 

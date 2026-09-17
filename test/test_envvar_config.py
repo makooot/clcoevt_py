@@ -131,4 +131,3 @@ class TestEnvvarConfig(unittest.TestCase):
         os.environ["ALLOW"] = "off"
         values, _ = envvar_get(self.options)
         self.assertFalse(values["allow"])
-
