@@ -1,25 +1,35 @@
-# clcoevt_py
-command options via commandline, environment variables and configuration files
+# clcoevt
+`clcoevt` is a small configuration library that resolves option values
+from multiple sources and returns the value with the highest priority.
 
-# Installation
+## overview
+
+The library reads values in this order:
+
+1. command line arguments
+2. environment variable configured by `cmdopts`
+3. environment variables
+4. TOML file
+5. default values
+
+This makes it easy to layer configuration while keeping a clear precedence
+model.
+
+## Installation
 
 ```bash
 pip install git+https://github.com/makooot/clcoevt_py.git
 ```
 
-## Quick Start
-
-Here is a simple example of how to use the library:
+## Usage
 
 ```python
 import sys
 
 import clcoevt
 
-
-command_details:clcoevt.ClcoevtCommanDetail = {
-    "cmdline": {
-    },
+command_detail: clcoevt.ClcoevtCommandDetail = {
+    "cmdline": {},
     "cmdopts": {
         "name": "TESTCMD_OPTS",
     },
@@ -55,7 +65,7 @@ command_details:clcoevt.ClcoevtCommanDetail = {
 }
 
 try:
-    clco = clcoevt.Clcoevt(command_details)
+    clco = clcoevt.Clcoevt(command_detail)
 except clcoevt.ClcoevtShowVersionException:
     print("CMD 0.0.0")
     sys.exit(0)
@@ -71,19 +81,22 @@ port = clco.get("port")
 allow = clco.get("allow")
 args = clco.args
 
-print(f'host : {host}')
-print(f'port : {port}')
-print(f'allow: {allow}')
-for i,a in enumerate(args):
-    print(f'args[{i}]: {a}')
-exit(0)
+print(f"host: {host}")
+print(f"port: {port}")
+print(f"allow: {allow}")
+for i, arg in enumerate(args):
+    print(f"args[{i}]: {arg}")
 ```
 
-## Contributing
+When you run:
 
-Please refer to CONTRIBUTING.md for details on how this repository handles
-issues, pull requests, and forks.
+```bash
+export HOST=prod-host
+export PORT=8080
+export ALLOW=false
+export TESTCMD_OPTS="--host=cmd-host --port=9000 --allow"
+python app.py --host cli-host --port 7000 --allow
+```
 
-## License
-
-MIT License
+`clco.get("host")` resolves to `cli-host` because command line arguments take
+priority over all other sources.
