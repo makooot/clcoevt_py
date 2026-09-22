@@ -17,6 +17,7 @@ class ClcoevtCmdopts(TypedDict, total=False):
 
 class ClcoevtToml(TypedDict, total=False):
     path: str
+    table: str
 
 
 class ClcoevtCliOption(TypedDict, total=False):

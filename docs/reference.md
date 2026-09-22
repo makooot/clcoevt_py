@@ -16,6 +16,8 @@ command_detail = {
     "toml": {
         # required if you want to read a TOML file
         "path": "config.toml",
+        # optional: table name
+        # "table": "tool.myapp",
     },
     "options": [
         {
@@ -156,7 +158,9 @@ ALLOW = true
 
 ```python
 command_detail = {
-    "toml": {"path": "config.toml"},
+    "toml": {
+        "path": "config.toml",
+    },
     "options": [
         {"key": "host", "type": "string", "toml": "HOST"},
         {"key": "port", "type": "int", "toml": "PORT"},

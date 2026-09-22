@@ -21,7 +21,11 @@ class Clcoevt:
         self.envvar = values
 
         # TODO: skip if '--no-toml-file' is specified
-        values, _ = tomlfile_get(options["toml"]["path"], options["options"])
+        values, _ = tomlfile_get(
+            options["toml"]["path"],
+            options.get("toml", {}).get("table", ""),
+            options["options"],
+        )
         self.tomlfile = values
 
         self.default: ClcoevtParserResult = {}
