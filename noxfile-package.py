@@ -1,5 +1,5 @@
-import sys
-import os
+import tomllib
+from pathlib import Path
 import nox
 from nox_uv import session
 
@@ -10,14 +10,15 @@ nox.options.default_venv_backend = "uv"
 def tests(s: nox.Session) -> None:
     """session for testing the package"""
 
-    # remove src from sys.path to ensure testing the installed package
-    src_dir = os.path.join(os.path.dirname(__file__), "src")
-    if src_dir in sys.path:
-        sys.path.remove(src_dir)
-    s.debug(f"sys.path: {sys.path}")
+    # get name and version number
+    pyproject_path = Path(__file__).parent / "pyproject.toml"
+    with open(pyproject_path, "rb") as f:
+        data = tomllib.load(f)
+    project_name = data["project"]["name"]
+    project_version = data["project"]["version"]
 
     # install the package
-    s.install("--no-index", "--find-links=./dist", "clcoevt")
+    s.install(f"./dist/{project_name}-{project_version}-py3-none-any.whl")
 
     # run the tests
     s.run("python", "-m", "unittest", "discover", "-s", "test_package")
