@@ -18,7 +18,7 @@ model.
 ## Installation
 
 ```bash
-pip install git+https://github.com/makooot/clcoevt_py.git
+pip install clcoevt
 ```
 
 ## Usage

@@ -4,7 +4,7 @@ command options via commandline, environment variables and configuration files
 # Installation
 
 ```bash
-pip install git+https://github.com/makooot/clcoevt_py.git
+pip install clcoevt
 ```
 
 ## Quick Start
