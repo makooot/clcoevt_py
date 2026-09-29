@@ -33,6 +33,11 @@ tasks:
     cmds:
       - uv run ruff check
 
+  lint-fix:
+    desc: run linter and fix issues
+    cmds:
+      - uv run ruff check --fix
+
   typecheck:
     desc: run type checker
     cmds:
@@ -67,3 +72,33 @@ tasks:
     desc: Update this project
     cmds:
       - uv sync
+
+  update-patch-version:
+    desc: update the patch version of this project
+    vars:
+      NEWVERSION:
+        sh: uv version --bump patch --dry-run
+    prompt:
+      - "{{.NEWVERSION}}\n  Are you sure?"
+    cmds:
+      - uv version --bump patch
+
+  update-minor-version:
+    desc: update the minor version of this project
+    vars:
+      NEWVERSION:
+        sh: uv version --bump minor --dry-run
+    prompt:
+      - "{{.NEWVERSION}}\n  Are you sure?"
+    cmds:
+      - uv version --bump minor
+
+  update-major-version:
+    desc: update the major version of this project
+    vars:
+      NEWVERSION:
+        sh: uv version --bump major --dry-run
+    prompt:
+      - "{{.NEWVERSION}}\n  Are you sure?"
+    cmds:
+      - uv version --bump major
