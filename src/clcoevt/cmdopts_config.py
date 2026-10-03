@@ -1,11 +1,6 @@
 import os
 from enum import Enum
-from fruits_skewers.skewer import skewer_parser
-from fruits_skewers.types import (
-    SkewerOption,
-    SkewerCommandDetail,
-    SkewerValueError,
-)
+import fruits_skewers
 from .types import ClcoevtCommandDetail, ClcoevtValueError, ClcoevtParserResult
 
 
@@ -119,7 +114,7 @@ def cmdopts_get(
         return values, warn_log
 
     args = separate_cmd_opts(os.environ[env])
-    skewer_command_detail: SkewerCommandDetail = {
+    skewer_command_detail: fruits_skewers.SkewerCommandDetail = {
         "cmdline": {
             "help_option": [],
             "version_option": [],
@@ -133,7 +128,7 @@ def cmdopts_get(
         cmd = o.get("cmd", [])
         if len(cmd) == 0:
             continue
-        skewer_option: SkewerOption = {
+        skewer_option: fruits_skewers.SkewerOption = {
             "key": key,
             "type": o.get("type", "string"),
             "cmd": cmd,
@@ -141,8 +136,8 @@ def cmdopts_get(
         skewer_command_detail["options"].append(skewer_option)
 
     try:
-        values, _ = skewer_parser(skewer_command_detail, args)
-    except SkewerValueError as e:
+        values, _ = fruits_skewers.skewer_parser(skewer_command_detail, args)
+    except fruits_skewers.SkewerValueError as e:
         warn_log.append(UserWarning(e.args[0]))
 
     return values, warn_log

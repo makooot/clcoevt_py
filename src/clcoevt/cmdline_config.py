@@ -1,11 +1,4 @@
-from fruits_skewers.skewer import skewer_parser
-from fruits_skewers.types import (
-    SkewerOption,
-    SkewerCommandDetail,
-    SkewerShowHelpException,
-    SkewerShowVersionException,
-    SkewerValueError,
-)
+import fruits_skewers
 from .types import (
     ClcoevtCommandDetail,
     ClcoevtParserResult,
@@ -18,7 +11,7 @@ from .types import (
 def cmdline_get(
     command_detail: ClcoevtCommandDetail, args: list[str] | None = None
 ) -> tuple[ClcoevtParserResult, list[str]]:
-    skewer_command_detail: SkewerCommandDetail = {
+    skewer_command_detail: fruits_skewers.SkewerCommandDetail = {
         "cmdline": command_detail.get("cmdline", {}),
         "options": [],
     }
@@ -29,7 +22,7 @@ def cmdline_get(
         cmd = o.get("cmd", [])
         if len(cmd) == 0:
             continue
-        skewer_option: SkewerOption = {
+        skewer_option: fruits_skewers.SkewerOption = {
             "key": key,
             "type": o.get("type", "string"),
             "cmd": cmd,
@@ -37,11 +30,11 @@ def cmdline_get(
         skewer_command_detail["options"].append(skewer_option)
 
     try:
-        values, unnamed = skewer_parser(skewer_command_detail, args)
-    except SkewerShowHelpException:
+        values, unnamed = fruits_skewers.skewer_parser(skewer_command_detail, args)
+    except fruits_skewers.SkewerShowHelpException:
         raise ClcoevtShowHelpException()
-    except SkewerShowVersionException:
+    except fruits_skewers.SkewerShowVersionException:
         raise ClcoevtShowVersionException()
-    except SkewerValueError as e:
+    except fruits_skewers.SkewerValueError as e:
         raise ClcoevtValueError(e.args[0])
     return values, unnamed

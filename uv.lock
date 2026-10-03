@@ -37,7 +37,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "fruits-skewers", specifier = "==0.7.0" }]
+requires-dist = [{ name = "fruits-skewers", specifier = "==0.9.0" }]
 
 [package.metadata.requires-dev]
 dev = [
@@ -100,11 +100,11 @@ wheels = [
 
 [[package]]
 name = "fruits-skewers"
-version = "0.7.0"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b4/79/a6bea9562dbd5e09d406645aa4925db63cafbfb4c8b0d334a6ef40cfb19f/fruits_skewers-0.7.0.tar.gz", hash = "sha256:c2d892ab877c95059ce65230235d1524287486f6b0ea40d060eb54a7694056b1", size = 3703, upload-time = "2026-09-11T22:16:54.151Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a0/ce/c7c4fcf9e5abba3b909e1f095af5e7db6c944eb47a161c33148677e43654/fruits_skewers-0.9.0.tar.gz", hash = "sha256:5bc13950fbe9b6a315ebe869ec719e020daa4da2c484dc29e9b45d0b750cd699", size = 3786, upload-time = "2026-10-03T02:43:24.616Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/01/81/1561bebe814194e89fda0fb0967c993bb450e9ff473bddd9bf24e82e54f2/fruits_skewers-0.7.0-py3-none-any.whl", hash = "sha256:fa2caac9db0e09d1f826fd375a9caa768c9fa8edabca42065d13bc9cfd994c34", size = 5418, upload-time = "2026-09-11T22:16:53.066Z" },
+    { url = "https://files.pythonhosted.org/packages/92/d2/2470908fcac370d87c707429ecf121443f69de1b91c419792446d9f6bb63/fruits_skewers-0.9.0-py3-none-any.whl", hash = "sha256:04b20bcea78ad9a11ac00da7cf0802a1e5b089498e45c7e6aa1249424f2ecf87", size = 5568, upload-time = "2026-10-03T02:43:23.523Z" },
 ]
 
 [[package]]
