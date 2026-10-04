@@ -35,60 +35,69 @@ class TestCmdsOptsConfig(unittest.TestCase):
         os.environ[self.cmd_opts] = ""
 
     def test_separate_cmd_opts_empty_string(self):
-        self.assertEqual(cmdopts_config.separate_cmd_opts(""), [])
+        result, _ = cmdopts_config.separate_cmd_opts("")
+        self.assertEqual(result, [])
 
     def test_separate_cmd_opts_whitespace_only(self):
-        self.assertEqual(cmdopts_config.separate_cmd_opts("   "), [])
+        result, _ = cmdopts_config.separate_cmd_opts("   ")
+        self.assertEqual(result, [])
 
     def test_separate_cmd_opts_words(self):
-        self.assertEqual(
-            cmdopts_config.separate_cmd_opts("--host localhost --port 8080"),
-            ["--host", "localhost", "--port", "8080"],
-        )
+        result, _ = cmdopts_config.separate_cmd_opts("--host localhost --port 8080")
+        self.assertEqual(result, ["--host", "localhost", "--port", "8080"])
 
     def test_separate_cmd_opts_quoted_words(self):
-        self.assertEqual(
-            cmdopts_config.separate_cmd_opts(
-                "--host 'local host' --name \"test value\""
-            ),
-            ["--host", "local host", "--name", "test value"],
+        result, _ = cmdopts_config.separate_cmd_opts(
+            "--host 'local host' --name \"test value\""
         )
+        self.assertEqual(result, ["--host", "local host", "--name", "test value"])
 
     def test_separate_cmd_opts_escaped_characters(self):
-        self.assertEqual(
-            cmdopts_config.separate_cmd_opts(r"plain\ value escaped\"quote"),
-            ["plain value", 'escaped"quote'],
-        )
+        result, _ = cmdopts_config.separate_cmd_opts(r"plain\ value escaped\"quote")
+        self.assertEqual(result, ["plain value", 'escaped"quote'])
 
     def test_separate_cmd_opts_adjacent_quoted_and_unquoted_text(self):
-        self.assertEqual(
-            cmdopts_config.separate_cmd_opts("prefix'quoted'\"text\""),
-            ["prefixquotedtext"],
-        )
+        result, _ = cmdopts_config.separate_cmd_opts("prefix'quoted'\"text\"")
+        self.assertEqual(result, ["prefixquotedtext"],)
 
     def test_separate_cmd_opts_unmatched_single_quote(self):
+        result, warn_log = cmdopts_config.separate_cmd_opts("before 'unfinished value")
+        self.assertEqual(result, ["before", "unfinished value"])
+        self.assertEqual(len(warn_log), 1)
         self.assertEqual(
-            cmdopts_config.separate_cmd_opts("before 'unfinished value"),
-            ["before", "unfinished value"],
+            str(warn_log[0]), "clcoevt-cmdopts: No matching single quotation"
         )
 
     def test_separate_cmd_opts_unmatched_double_quote(self):
+        result, warn_log = cmdopts_config.separate_cmd_opts('before "unfinished value')
+        self.assertEqual(result, ["before", "unfinished value"])
+        self.assertEqual(len(warn_log), 1)
         self.assertEqual(
-            cmdopts_config.separate_cmd_opts('before "unfinished value'),
-            ["before", "unfinished value"],
+            str(warn_log[0]), "clcoevt-cmdopts: No matching double quotation"
         )
 
     def test_separate_cmd_opts_trailing_backslash(self):
+        result, warn_log = cmdopts_config.separate_cmd_opts("before trailing\\")
+        self.assertEqual(result, ["before", "trailing"])
+        self.assertEqual(len(warn_log), 1)
         self.assertEqual(
-            cmdopts_config.separate_cmd_opts("before trailing\\"),
-            ["before", "trailing"],
+            str(warn_log[0]), "clcoevt-cmdopts: No character follows the backslash"
+        )
+
+    def test_separate_cmd_opts_no_matching_backslash_in_double_quotes(self):
+        result, warn_log = cmdopts_config.separate_cmd_opts('before "unfinished value\\')
+        self.assertEqual(result, ["before", "unfinished value"])
+        self.assertEqual(len(warn_log), 2)
+        self.assertEqual(
+            str(warn_log[0]), "clcoevt-cmdopts: No character follows the backslash"
+        )
+        self.assertEqual(
+            str(warn_log[1]), "clcoevt-cmdopts: No matching double quotation"
         )
 
     def test_separate_cmd_opts_empty_quoted_values(self):
-        self.assertEqual(
-            cmdopts_config.separate_cmd_opts("'' \"\""),
-            ["", ""],
-        )
+        result, _ = cmdopts_config.separate_cmd_opts("'' \"\"")
+        self.assertEqual(result, ["", ""])
 
     def test_no_cmd_opts(self):
         del os.environ[self.cmd_opts]
@@ -146,16 +155,16 @@ class TestCmdsOptsConfig(unittest.TestCase):
         os.environ[self.cmd_opts] = "--host"
         _, warn_log = cmdopts_config.cmdopts_get(self.settings)
         self.assertEqual(len(warn_log), 1)
-        self.assertEqual(str(warn_log[0]), "Invalid option: --host")
+        self.assertEqual(str(warn_log[0]), "clcoevt-cmdopts: Invalid option: --host")
 
     def test_invalid_type_int(self):
         os.environ[self.cmd_opts] = "--port=x"
         _, warn_log = cmdopts_config.cmdopts_get(self.settings)
         self.assertEqual(len(warn_log), 1)
-        self.assertEqual(str(warn_log[0]), "Invalid value: --port=x")
+        self.assertEqual(str(warn_log[0]), "clcoevt-cmdopts: Invalid value: --port=x")
 
     def test_no_value_int(self):
         os.environ[self.cmd_opts] = "--port"
         _, warn_log = cmdopts_config.cmdopts_get(self.settings)
         self.assertEqual(len(warn_log), 1)
-        self.assertEqual(str(warn_log[0]), "Invalid option: --port")
+        self.assertEqual(str(warn_log[0]), "clcoevt-cmdopts: Invalid option: --port")

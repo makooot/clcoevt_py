@@ -21,14 +21,14 @@ class TestEnvvarConfig(unittest.TestCase):
         options: list[ClcoevtCliOption] = [{"key": "a", "envvar": "A"}]
         _, warn_log = envvar_get(options)
         self.assertEqual(
-            str(warn_log[0]), "Invalid setting: {'key': 'a', 'envvar': 'A'}"
+            str(warn_log[0]), "clcoevt-env: Invalid setting: {'key': 'a', 'envvar': 'A'}"
         )
 
     def test_not_defined(self):
         del os.environ["DB_HOST"]
         values, warn_log = envvar_get(self.options)
         self.assertFalse("db_host" in values)
-        self.assertEqual(str(warn_log[0]), "Environment variable not found: DB_HOST")
+        self.assertEqual(str(warn_log[0]), "clcoevt-env: Environment variable not found: DB_HOST")
 
     def test_null_string(self):
         os.environ["DB_HOST"] = ""
@@ -44,13 +44,13 @@ class TestEnvvarConfig(unittest.TestCase):
         os.environ["DB_PORT"] = ""
         values, warn_log = envvar_get(self.options)
         self.assertFalse("db_port" in values)
-        self.assertEqual(str(warn_log[0]), "Invalid value for DB_PORT: ")
+        self.assertEqual(str(warn_log[0]), "clcoevt-env: Invalid value: DB_PORT")
 
     def test_invalid_int(self):
         os.environ["DB_PORT"] = "abc"
         values, warn_log = envvar_get(self.options)
         self.assertFalse("db_port" in values)
-        self.assertEqual(str(warn_log[0]), "Invalid value for DB_PORT: abc")
+        self.assertEqual(str(warn_log[0]), "clcoevt-env: Invalid value: DB_PORT")
 
     def test_positive_integer(self):
         os.environ["DB_PORT"] = "12345"

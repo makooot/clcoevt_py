@@ -23,12 +23,12 @@ def envvar_get(
             case _:
                 convertor = None
         if environmentVariableName is None or convertor is None:
-            warn_log.append(UserWarning(f"Invalid setting: {o}"))
+            warn_log.append(UserWarning(f"clcoevt-env: Invalid setting: {o}"))
             continue
         if environmentVariableName not in os.environ:
             warn_log.append(
                 UserWarning(
-                    f"Environment variable not found: {environmentVariableName}"
+                    f"clcoevt-env: Environment variable not found: {environmentVariableName}"
                 )
             )
             continue
@@ -37,8 +37,6 @@ def envvar_get(
             values[key] = convertor(value_string)
         except ValueError:
             warn_log.append(
-                UserWarning(
-                    f"Invalid value for {environmentVariableName}: {value_string}"
-                )
+                UserWarning(f"clcoevt-env: Invalid value: {environmentVariableName}")
             )
     return values, warn_log

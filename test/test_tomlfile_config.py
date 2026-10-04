@@ -19,7 +19,7 @@ class TestTomlfileConfig(unittest.TestCase):
         _, warn_log = tomlfile_get(
             "file_not_found.toml", "", self.clcoevt_config["options"]
         )
-        self.assertEqual(str(warn_log[0]), "File not found: file_not_found.toml")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: File not found: file_not_found.toml")
 
     def test_empty_file(self):
         _, warn_log = tomlfile_get(
@@ -31,7 +31,7 @@ class TestTomlfileConfig(unittest.TestCase):
         _, warn_log = tomlfile_get(
             "test-data/invalid.toml", "", self.clcoevt_config["options"]
         )
-        self.assertEqual(str(warn_log[0]), "Invalid TOML file: test-data/invalid.toml")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: Invalid TOML file: test-data/invalid.toml")
 
     def test_empty_string(self):
         values, warn_log = tomlfile_get(
@@ -90,7 +90,7 @@ class TestTomlfileConfig(unittest.TestCase):
             "",
             self.clcoevt_config["options"],
         )
-        self.assertEqual(str(warn_log[0]), "Invalid value for PORT: x")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: Invalid value for PORT: x")
 
     def test_unmatch_typeString_valueInt(self):
         values, warn_log = tomlfile_get(
@@ -98,7 +98,7 @@ class TestTomlfileConfig(unittest.TestCase):
             "",
             self.clcoevt_config["options"],
         )
-        self.assertEqual(str(warn_log[0]), "Invalid value for HOST: 0")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: Invalid value for HOST: 0")
 
     def test_unmatch_typeBool_valueInt(self):
         values, warn_log = tomlfile_get(
@@ -106,7 +106,7 @@ class TestTomlfileConfig(unittest.TestCase):
             "",
             self.clcoevt_config["options"],
         )
-        self.assertEqual(str(warn_log[0]), "Invalid value for ALLOW: 0")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: Invalid value for ALLOW: 0")
 
     def test_unmatch_typeInt_valueBool(self):
         values, warn_log = tomlfile_get(
@@ -114,7 +114,7 @@ class TestTomlfileConfig(unittest.TestCase):
             "",
             self.clcoevt_config["options"],
         )
-        self.assertEqual(str(warn_log[0]), "Invalid value for PORT: True")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: Invalid value for PORT: True")
 
     def test_unmatch_typeString_valueBool(self):
         values, warn_log = tomlfile_get(
@@ -122,7 +122,7 @@ class TestTomlfileConfig(unittest.TestCase):
             "",
             self.clcoevt_config["options"],
         )
-        self.assertEqual(str(warn_log[0]), "Invalid value for HOST: True")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: Invalid value for HOST: True")
 
     def test_unmatch_typeBool_valueString(self):
         values, warn_log = tomlfile_get(
@@ -130,13 +130,13 @@ class TestTomlfileConfig(unittest.TestCase):
             "",
             self.clcoevt_config["options"],
         )
-        self.assertEqual(str(warn_log[0]), "Invalid value for ALLOW: x")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: Invalid value for ALLOW: x")
 
     def test_table_not_found(self):
         values, warn_log = tomlfile_get(
             "test-data/valid.toml", "nonexistent_table", self.clcoevt_config["options"]
         )
-        self.assertEqual(str(warn_log[0]), "Table not found: nonexistent_table")
+        self.assertEqual(str(warn_log[0]), "clcoevt-toml: Table not found: nonexistent_table")
 
     def test_table_found(self):
         values, warn_log = tomlfile_get(
