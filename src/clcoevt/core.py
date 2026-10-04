@@ -10,32 +10,47 @@ class Clcoevt:
         values, unnamed = cmdline_get(options)
         self.cmdline = values
         self.args = unnamed
+        self.warn_log: list[UserWarning] = []
 
         # TODO: skip if '--no-cmd-opts' is specified
         # TODO: set variable name if '--cmd-opts' is specified
-        values, _ = cmdopts_get(options)
+        values, w = cmdopts_get(options)
         self.cmdopts = values
+        self.warn_log.extend(w)
 
         # TODO: skip if '--no-env-var' is specified
-        values, _ = envvar_get(options["options"])
+        values, w = envvar_get(options.get("options", []))
         self.envvar = values
+        self.warn_log.extend(w)
 
         # TODO: skip if '--no-toml-file' is specified
-        values, _ = tomlfile_get(
-            options["toml"]["path"],
-            options.get("toml", {}).get("table", ""),
-            options["options"],
-        )
-        self.tomlfile = values
+        try:
+            options["toml"]["path"]
+        except KeyError:
+            self.warn_log.append(
+                UserWarning("clcoevt-toml: Not found: toml.path in command_detail")
+            )
+        else:
+            values, w = tomlfile_get(
+                options["toml"]["path"],
+                options.get("toml", {}).get("table", ""),
+                options["options"],
+            )
+            self.tomlfile = values
+            self.warn_log.extend(w)
 
         self.default: ClcoevtParserResult = {}
-        for o in options["options"]:
+        for o in options.get("options", []):
             key = o.get("key", None)
             if key is None:
                 continue
             default = o.get("default", None)
             if default is not None:
                 self.default[key] = default
+            else:
+                self.warn_log.append(
+                    UserWarning(f"clcoevt: No default value for option: {key}")
+                )
 
     def get(self, key):
         try:

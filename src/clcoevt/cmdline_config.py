@@ -36,5 +36,5 @@ def cmdline_get(
     except fruits_skewers.SkewerShowVersionException:
         raise ClcoevtShowVersionException()
     except fruits_skewers.SkewerValueError as e:
-        raise ClcoevtValueError(e.args[0])
+        raise ClcoevtValueError(f"clcoevt-cmdline: {e.args[0]}")
     return values, unnamed

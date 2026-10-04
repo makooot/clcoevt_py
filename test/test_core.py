@@ -128,3 +128,43 @@ class TestClcoevt(unittest.TestCase):
         self.assertEqual(clco.get("host"), "clihost")
         self.assertEqual(clco.get("port"), 14080)
         self.assertEqual(clco.get("allow"), True)
+
+    def test_no_default_value(self):
+        options = types.ClcoevtCommandDetail(
+            options=[
+                {
+                    "key": "host",
+                    "type": "string",
+                    "cmd": ["--host"],
+                }
+            ]
+        )
+        sys.argv = ["testcmd"]
+        clco = clcoevt.Clcoevt(options)
+        for warning in clco.warn_log:
+            if str(warning) == "clcoevt: No default value for option: host":
+                break
+        else:
+            self.fail("Warning not found: clcoevt: No default value for option:")
+
+    def test_no_toml_entry_in_settings(self):
+        options = types.ClcoevtCommandDetail()
+        clco = clcoevt.Clcoevt(options)
+        for warning in clco.warn_log:
+            if str(warning) == "clcoevt-toml: Not found: toml.path in command_detail":
+                break
+        else:
+            self.fail("Warning not found: clcoevt-toml: Not found:")
+
+    def test_no_toml_path_entry_in_settings(self):
+        options = types.ClcoevtCommandDetail(
+            {
+                "toml": {},
+            }
+        )
+        clco = clcoevt.Clcoevt(options)
+        for warning in clco.warn_log:
+            if str(warning) == "clcoevt-toml: Not found: toml.path in command_detail":
+                break
+        else:
+            self.fail("Warning not found: clcoevt-toml: Not found:")

@@ -1,10 +1,10 @@
 import os
 from enum import Enum
 import fruits_skewers
-from .types import ClcoevtCommandDetail, ClcoevtValueError, ClcoevtParserResult
+from .types import ClcoevtCommandDetail, ClcoevtParserResult
 
 
-def separate_cmd_opts(s):
+def separate_cmd_opts(s) -> tuple[list[str], list[UserWarning]]:
     class Status(Enum):
         SEPARATOR = 0
         NON_QUOTE = 1
@@ -13,9 +13,11 @@ def separate_cmd_opts(s):
         BACKSLASH = 4
         BACKSLASH_IN_DOUBLE_QUOTE = 5
 
-    result = []
-    token = ""
-    token_exist = False
+    warn_log: list[UserWarning] = []
+
+    result: list[str] = []
+    token: str = ""
+    token_exist: bool = False
     status = Status.SEPARATOR
     for c in list(s):
         match status:
@@ -80,23 +82,33 @@ def separate_cmd_opts(s):
             if token_exist:
                 result.append(token)
         case Status.IN_SINGLE_QUOTE:
-            # TODO: warning: No matching single quotation
+            warn_log.append(
+                UserWarning("clcoevt-cmdopts: No matching single quotation")
+            )
             if token_exist:
                 result.append(token)
         case Status.IN_DOUBLE_QUOTE:
-            # TODO: warning: No matching double quotation
+            warn_log.append(
+                UserWarning("clcoevt-cmdopts: No matching double quotation")
+            )
             if token_exist:
                 result.append(token)
         case Status.BACKSLASH:
-            # TODO: warning: No character follows the backslash
+            warn_log.append(
+                UserWarning("clcoevt-cmdopts: No character follows the backslash")
+            )
             if token_exist:
                 result.append(token)
         case Status.BACKSLASH_IN_DOUBLE_QUOTE:
-            # TODO: warning: No character follows the backslash
-            # TODO: warning: No matching double quotation
+            warn_log.append(
+                UserWarning("clcoevt-cmdopts: No character follows the backslash")
+            )
+            warn_log.append(
+                UserWarning("clcoevt-cmdopts: No matching double quotation")
+            )
             if token_exist:
                 result.append(token)
-    return result
+    return result, warn_log
 
 
 def cmdopts_get(
@@ -108,12 +120,19 @@ def cmdopts_get(
     try:
         env = command_detail["cmdopts"]["name"]
     except KeyError:
-        raise ClcoevtValueError("Not found: cmdopts.name in command_detail")
-
-    if env not in os.environ:
+        warn_log.append(
+            UserWarning("clcoevt-cmdopts: Not found: cmdopts.name in command_detail")
+        )
         return values, warn_log
 
-    args = separate_cmd_opts(os.environ[env])
+    if env not in os.environ:
+        warn_log.append(
+            UserWarning(f"clcoevt-cmdopts: Environment variable not found: {env}")
+        )
+        return values, warn_log
+
+    args, w = separate_cmd_opts(os.environ[env])
+    warn_log.extend(w)
     skewer_command_detail: fruits_skewers.SkewerCommandDetail = {
         "cmdline": {
             "help_option": [],
@@ -138,6 +157,6 @@ def cmdopts_get(
     try:
         values, _ = fruits_skewers.skewer_parser(skewer_command_detail, args)
     except fruits_skewers.SkewerValueError as e:
-        warn_log.append(UserWarning(e.args[0]))
+        warn_log.append(UserWarning(f"clcoevt-cmdopts: {e.args[0]}"))
 
     return values, warn_log

@@ -29,10 +29,10 @@ def tomlfile_get(
         with open(filename, "rb") as f:
             tomlobj = tomllib.load(f)
     except FileNotFoundError:
-        warn_log.append(UserWarning(f"File not found: {filename}"))
+        warn_log.append(UserWarning(f"clcoevt-toml: File not found: {filename}"))
         return values, warn_log
     except tomllib.TOMLDecodeError:
-        warn_log.append(UserWarning(f"Invalid TOML file: {filename}"))
+        warn_log.append(UserWarning(f"clcoevt-toml: Invalid TOML file: {filename}"))
         return values, warn_log
 
     if table != "":
@@ -41,7 +41,7 @@ def tomlfile_get(
             if t in tomlobj:
                 tomlobj = tomlobj[t]
             else:
-                warn_log.append(UserWarning(f"Table not found: {table}"))
+                warn_log.append(UserWarning(f"clcoevt-toml: Table not found: {table}"))
                 return values, warn_log
     return tomlfile_geto(values, warn_log, tomlobj, options)
 
@@ -66,7 +66,7 @@ def tomlfile_geto(
             case _:
                 convertor = None
         if name is None or convertor is None or key is None:
-            warn_log.append(UserWarning(f"Invalid setting: {o}"))
+            warn_log.append(UserWarning(f"clcoevt-toml: Invalid setting: {o}"))
             continue
         dotted_name = name.split(".")
         obj = tomlobj
@@ -77,14 +77,12 @@ def tomlfile_geto(
                 obj = None
                 break
         if obj is None:
-            warn_log.append(UserWarning(f"Key not found: {name}"))
+            warn_log.append(UserWarning(f"clcoevt-toml: Key not found: {name}"))
             continue
         if dotted_name[-1] in obj:
             try:
                 values[key] = convertor(obj[dotted_name[-1]])
             except ValueError:
-                warn_log.append(
-                    UserWarning(f"Invalid value for {name}: {obj[dotted_name[-1]]}")
-                )
+                warn_log.append(UserWarning(f"clcoevt-toml: Invalid value: {name}"))
 
     return values, warn_log
