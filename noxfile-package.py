@@ -1,5 +1,6 @@
 import tomllib
 from pathlib import Path
+
 import nox
 from nox_uv import session
 

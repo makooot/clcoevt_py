@@ -1,5 +1,6 @@
-import unittest
 import typing
+import unittest
+
 from clcoevt.tomlfile_config import tomlfile_get
 from clcoevt.types import ClcoevtCommandDetail
 

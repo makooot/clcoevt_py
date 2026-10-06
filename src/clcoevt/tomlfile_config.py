@@ -1,4 +1,5 @@
 import tomllib
+
 from .types import ClcoevtCliOption, ClcoevtParserResult
 
 

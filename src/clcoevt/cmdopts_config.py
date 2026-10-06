@@ -1,6 +1,8 @@
 import os
 from enum import Enum
+
 import fruits_skewers
+
 from .types import ClcoevtCommandDetail, ClcoevtParserResult
 
 

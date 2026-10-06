@@ -1,5 +1,6 @@
-import unittest
 import typing
+import unittest
+
 from clcoevt.cmdline_config import cmdline_get
 from clcoevt.types import (
     ClcoevtCommandDetail,

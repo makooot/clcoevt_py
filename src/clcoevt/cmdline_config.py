@@ -1,4 +1,5 @@
 import fruits_skewers
+
 from .types import (
     ClcoevtCommandDetail,
     ClcoevtParserResult,

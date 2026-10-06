@@ -1,8 +1,8 @@
-import unittest
 import os
 import typing
-import clcoevt.cmdopts_config as cmdopts_config
-import clcoevt.types as types
+import unittest
+
+from clcoevt import cmdopts_config, types
 
 
 class TestCmdsOptsConfig(unittest.TestCase):

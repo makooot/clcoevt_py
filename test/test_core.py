@@ -1,9 +1,10 @@
-import unittest
-import sys
 import os
+import sys
 import typing
+import unittest
+
 import clcoevt.core as clcoevt
-import clcoevt.types as types
+from clcoevt import types
 
 
 class TestClcoevt(unittest.TestCase):

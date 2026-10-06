@@ -1,6 +1,7 @@
-import unittest
 import os
 import typing
+import unittest
+
 from clcoevt.envvar_config import envvar_get
 from clcoevt.types import ClcoevtCliOption
 
