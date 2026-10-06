@@ -1,6 +1,6 @@
 [project]
 name = "clcoevt"
-version = "0.5.0"
+version = "0.6.0"
 description = "command options via commandline, environment variables and configuration files"
 readme = "README.md"
 license = "MIT"
