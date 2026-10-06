@@ -6,7 +6,7 @@ import fruits_skewers
 from .types import ClcoevtCommandDetail, ClcoevtParserResult
 
 
-def separate_cmd_opts(s) -> tuple[list[str], list[UserWarning]]:
+def separate_cmd_opts(s: str) -> tuple[list[str], list[UserWarning]]:
     class Status(Enum):
         SEPARATOR = 0
         NON_QUOTE = 1

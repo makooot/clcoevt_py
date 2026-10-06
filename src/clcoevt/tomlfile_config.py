@@ -66,7 +66,7 @@ def tomlfile_geto(
                 convertor = thru_bool
             case _:
                 convertor = None
-        if name is None or convertor is None or key is None:
+        if name is None or convertor is None:
             warn_log.append(UserWarning(f"clcoevt-toml: Invalid setting: {o}"))
             continue
         dotted_name = name.split(".")
