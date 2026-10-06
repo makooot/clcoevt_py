@@ -1,6 +1,6 @@
 import os
 
-from . import common
+import fruits_skewers.helper
 from .types import ClcoevtCliOption, ClcoevtParserResult
 
 
@@ -20,7 +20,7 @@ def envvar_get(
             case "string":
                 convertor = str
             case "bool":
-                convertor = common.str_to_bool
+                convertor = fruits_skewers.helper.strtobool
             case _:
                 convertor = None
         if environmentVariableName is None or convertor is None:
